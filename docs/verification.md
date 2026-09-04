@@ -22,7 +22,7 @@ The two official validators require PyYAML. It was installed only into a tempora
 After the final fixes, all validators and the final explicit route-only run were executed against this 18-file source snapshot (the report itself is excluded so recording the value does not make the digest self-referential):
 
 ```text
-sha256: e394ce6e6f936b613f50347183cc501209e99c7d681f24f6db819b26a7c41d34
+sha256: f76a683fffc34dde77ba091a252b7c3a03f944347e04eceaf0e38ff917b77102
 ```
 
 The reproducible algorithm walks regular files below the repository root, excludes `.git`, every `__pycache__` directory, `*.pyc`, and `docs/verification.md`, and sorts POSIX relative paths. For each file it appends `UTF8(relative_path)`, a NUL byte, the 32-byte SHA-256 of the contents, and a newline to an outer SHA-256 stream. The included manifest is:
