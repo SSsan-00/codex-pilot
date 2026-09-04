@@ -1,5 +1,7 @@
 # Verification report
 
+> Historical note: this report records the pre-required-Ponytail validation snapshot. The current default policy is maintained in `README.md`, `examples/codex-pilot.toml`, and `skills/codex-pilot/references/configuration.md`; rerun the release checks after any source update.
+
 Verification date: 2026-09-05
 
 This report distinguishes structural validation, model behavior, host metadata, and untested platform claims.

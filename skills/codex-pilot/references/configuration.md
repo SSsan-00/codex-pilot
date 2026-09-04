@@ -27,7 +27,7 @@ max_reasoning = "max"
 max_escalations = 2
 max_agents = 3
 
-ponytail = "auto"
+ponytail = "required"
 
 show_routing = true
 

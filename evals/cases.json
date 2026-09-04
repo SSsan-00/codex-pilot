@@ -176,6 +176,16 @@
       }
     },
     {
+      "id": "ponytail-default-required-absent",
+      "config": "default",
+      "capability": "absent",
+      "mode": "implementation",
+      "expected": {
+        "stop_before_implementation": true,
+        "report_missing_dependency": true
+      }
+    },
+    {
       "id": "ponytail-auto-present",
       "config": "auto",
       "capability": "advertised",

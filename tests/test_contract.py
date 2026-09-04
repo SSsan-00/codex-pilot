@@ -51,7 +51,7 @@ class PackageContractTests(unittest.TestCase):
                 "max_reasoning": "max",
                 "max_escalations": 2,
                 "max_agents": 3,
-                "ponytail": "auto",
+                "ponytail": "required",
                 "show_routing": True,
                 "suggest_parent_upgrade": True,
                 "suggest_parent_downgrade": True,
@@ -63,7 +63,7 @@ class PackageContractTests(unittest.TestCase):
         self.assertEqual(len(corpus["routing"]), 7)
         self.assertEqual(len(corpus["parent_upgrade"]), 4)
         self.assertEqual(len(corpus["escalation"]), 4)
-        self.assertEqual(len(corpus["ponytail_integration"]), 7)
+        self.assertEqual(len(corpus["ponytail_integration"]), 8)
         self.assertTrue(corpus["escalation_cases_are_independent"])
         self.assertTrue(corpus["default_budget_does_not_traverse_full_ladder"])
 
@@ -113,6 +113,16 @@ class PackageContractTests(unittest.TestCase):
         self.assertTrue(parent["parent-d"]["expected"]["must_not_interrupt"])
 
         ponytail = {case["id"]: case for case in corpus["ponytail_integration"]}
+        self.assertTrue(
+            ponytail["ponytail-default-required-absent"]["expected"][
+                "stop_before_implementation"
+            ]
+        )
+        self.assertTrue(
+            ponytail["ponytail-default-required-absent"]["expected"][
+                "report_missing_dependency"
+            ]
+        )
         self.assertTrue(
             ponytail["ponytail-pilot-only-invocation"]["expected"][
                 "invoke_ponytail"

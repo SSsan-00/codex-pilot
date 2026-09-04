@@ -46,7 +46,7 @@ Execution flow:
 User request
   -> current Parent
   -> project guidance and relevant-code inspection
-  -> optional Ponytail pre-check
+  -> required Ponytail pre-check
   -> task assessment and routing confidence
   -> user resource policy and capability discovery
   -> Parent execution or bounded worker delegation
@@ -128,17 +128,17 @@ Low confidence triggers bounded investigation first. If confidence remains low b
 
 ## Ponytail
 
-Ponytail remains a separate optional capability:
+Ponytail remains a separate external dependency and is required by default:
 
-- `auto` (default): use it when already advertised by the host; otherwise continue silently.
-- `required`: stop before implementation and report it missing when unavailable.
+- `required` (default): stop before implementation and report it missing when unavailable.
+- `auto`: use it when already advertised by the host; otherwise continue silently.
 - `disabled`: do not invoke it.
 
 Codex Pilot never vendors or reconstructs an unseen Ponytail. When present, Ponytail owns minimal implementation and YAGNI review; Codex Pilot owns routing and verification; `AGENTS.md` owns project-specific rules.
 
 Invoking Codex Pilot alone is sufficient; users do not need to add a second Ponytail invocation. For implementation requests, Pilot loads an advertised Ponytail coding skill at most once after it understands the affected code and reuses that result as its minimality review. Trusted host hooks may already inject Ponytail; Pilot does not duplicate them. Ponytail's `lite`, `full`, or `ultra` intensity changes only its minimality guidance—Ponytail `ultra` is unrelated to Codex Ultra and cannot change models, reasoning, or agents. User acceptance criteria, project rules, required tests, and safety controls always win.
 
-Self-hosting verification used [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) v4.9.0. It remains an optional external Plugin and is never installed by Codex Pilot itself. Review and trust its lifecycle hooks separately from installing or invoking its Skills.
+Self-hosting verification used [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) v4.9.0. It is an external Plugin required by the default policy and is never installed by Codex Pilot itself. Review and trust its lifecycle hooks separately from installing or invoking its Skills.
 
 ## Fast mode
 
@@ -152,7 +152,7 @@ There is no documented Skill or Plugin manifest control that toggles Fast for th
 
 ## Configuration
 
-Configuration is optional. Most users can install the Skill and ask for a development task normally.
+Configuration is optional after the required Ponytail dependency is installed. Most users can then install the Skill and ask for a development task normally. If Ponytail is unavailable, the default policy stops before implementation; see [Ponytail](#ponytail) for installation or set `ponytail = "auto"` explicitly.
 
 Precedence is per setting:
 
@@ -173,7 +173,7 @@ min_reasoning = "medium"
 max_reasoning = "max"
 max_escalations = 2
 max_agents = 3
-ponytail = "auto"
+ponytail = "required"
 show_routing = true
 suggest_parent_upgrade = true
 suggest_parent_downgrade = true
@@ -286,7 +286,7 @@ Project verification commands remain project-specific and may add their own plat
 
 ## Verification
 
-The evaluation corpus in [evals/cases.json](evals/cases.json) covers seven routing cases, four Parent recommendation cases, four escalation transitions, seven Ponytail integration cases, final-response routing visibility, and route-only invariants. [evals/README.md](evals/README.md) defines forward-testing rules.
+The evaluation corpus in [evals/cases.json](evals/cases.json) covers seven routing cases, four Parent recommendation cases, four escalation transitions, eight Ponytail integration cases, final-response routing visibility, and route-only invariants. [evals/README.md](evals/README.md) defines forward-testing rules.
 
 Before release:
 
@@ -322,7 +322,7 @@ Pilot policy cannot toggle either feature. Enable a supported mode in the host, 
 
 ### Ponytail is unavailable
 
-The default `auto` mode continues without it. `required` intentionally stops before implementation so the missing dependency is visible.
+The default `required` mode intentionally stops before implementation when Ponytail is unavailable. Set `ponytail = "auto"` to continue without it, or install Ponytail as described above.
 
 ## Limitations
 

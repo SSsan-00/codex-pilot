@@ -4,6 +4,8 @@ Codex Pilotは、開発タスクの複雑さ・リスク・不確実性・検証
 
 通常はモデルを毎回選ぶ必要はありません。インストール後は、Codexへ普段どおり開発作業を依頼してください。
 
+既定ではPonytailも必須です。先に導入するか、導入できない環境では`ponytail = "auto"`を明示してください。導入手順は「7. Ponytailを導入する」にあります。
+
 ## 1. インストール
 
 ### macOS / Linux / WSL
@@ -111,9 +113,9 @@ Sol / high -> Sol / xhigh -> Sol / max -> Codex Ultra
 
 既定では、明らかに簡単な作業に対して既知のParentが過剰に強い場合、完了後に次回向けのDowngrade候補を1行だけ提案します。現在の作業は中断せず、Parentが不明な場合は提案しません。無効にする場合は`suggest_parent_downgrade = false`を指定します。
 
-## 7. Ponytailを併用する
+## 7. Ponytailを導入する
 
-Ponytailは任意です。未導入でも、既定の`ponytail = "auto"`ではCodex Pilotが通常どおり継続します。
+Ponytailは外部依存で、既定の`ponytail = "required"`では必須です。未導入の場合、実装を開始せず不足を通知します。
 
 Ponytailを導入済みなら、実装依頼では`$codex-pilot`だけを指定すれば十分です。`$ponytail`を同じPromptへ重ねて指定する必要はなく、Codex Pilotが対象Codeを理解した後にPonytailを一度だけ読み込みます。`route-only`や説明だけの依頼では読み込みません。
 
@@ -130,10 +132,10 @@ codex plugin add ponytail@ponytail
 
 新しいCodexタスクを開始し、`/hooks`でPonytailのLifecycle Hookを確認してから、必要なHookだけを信頼してください。Codex PilotはPonytailを最小実装・再利用・YAGNI Reviewに使用します。Ponytailの`ultra`はPonytail自身の強度であり、Codex Ultraやモデル設定ではありません。
 
-Ponytailを必須または無効にする例：
+Ponytailを任意利用または無効にする例：
 
 ```toml
-ponytail = "required"
+ponytail = "auto"
 # または
 ponytail = "disabled"
 ```
