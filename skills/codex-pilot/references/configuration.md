@@ -29,10 +29,10 @@ max_agents = 3
 
 ponytail = "auto"
 
-show_routing = false
+show_routing = true
 
 suggest_parent_upgrade = true
-suggest_parent_downgrade = false
+suggest_parent_downgrade = true
 ```
 
 Supported values:
@@ -68,7 +68,9 @@ Prefer efficient models, single-agent execution, and the lowest permitted suffic
 
 Ponytail is an optional separate skill or plugin. Use the host-advertised Skill instructions as the source of truth; do not copy, vendor, or reconstruct them inside Pilot.
 
-- `auto`: inspect the skills already advertised by the host. If a Ponytail coding skill is available and relevant, load it once after understanding the code. If the host explicitly reports that a trusted Ponytail hook already injected the active rules, do not load or restate them again. Otherwise continue silently.
+Invoking Codex Pilot alone is sufficient. Do not require or ask the user to invoke both skills: for an implementation request, Pilot applies the setting below and loads an advertised Ponytail coding skill itself. An explicit current-request instruction to stop or disable Ponytail still wins by the precedence rules above.
+
+- `auto`: inspect the skills already advertised by the host. For a Pilot implementation request, if a Ponytail coding skill is available, load it once after understanding the code. If the host explicitly reports that a trusted Ponytail hook already injected the active rules, do not load or restate them again. Otherwise continue silently.
 - `required`: use the advertised Ponytail skill. If it is unavailable, stop before implementation and state that the required dependency is missing.
 - `disabled`: do not invoke Ponytail.
 

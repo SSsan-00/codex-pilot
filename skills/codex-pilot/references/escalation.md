@@ -73,4 +73,4 @@ Routing confidence: low
 The task has unresolved system-wide and data-integrity risk. If the current Parent is Sol / high, rerun with Sol / xhigh before consequential changes.
 ```
 
-Do not show a downgrade suggestion by default. When `suggest_parent_downgrade = true`, a known overpowered Parent may receive one short suggestion after a clearly SIMPLE route; never interrupt the task for a downgrade.
+When `suggest_parent_downgrade = true` (default), a known overpowered Parent may receive one short suggestion after a clearly SIMPLE route; never interrupt the task for a downgrade. Omit it when the Parent is unknown or the user sets this option to false.

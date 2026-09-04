@@ -98,7 +98,7 @@ Codex Pilot cannot change the active Parent mid-turn. When routing confidence re
 Sol / high -> Sol / xhigh -> Sol / max -> Ultra
 ```
 
-It tries bounded inspection first, does not jump directly to Ultra, and keeps Worker escalation separate. Downgrade suggestions are off by default.
+It tries bounded inspection first, does not jump directly to Ultra, and keeps Worker escalation separate. Downgrade suggestions are on by default, appear only after clearly SIMPLE work with a known overpowered Parent, and never interrupt the task.
 
 ## Workers, Multi-Agent, and Ultra
 
@@ -136,7 +136,7 @@ Ponytail remains a separate optional capability:
 
 Codex Pilot never vendors or reconstructs an unseen Ponytail. When present, Ponytail owns minimal implementation and YAGNI review; Codex Pilot owns routing and verification; `AGENTS.md` owns project-specific rules.
 
-Pilot loads Ponytail at most once after it understands the affected code and reuses that result as its minimality review. Trusted host hooks may already inject Ponytail; Pilot does not duplicate them. Ponytail's `lite`, `full`, or `ultra` intensity changes only its minimality guidance—Ponytail `ultra` is unrelated to Codex Ultra and cannot change models, reasoning, or agents. User acceptance criteria, project rules, required tests, and safety controls always win.
+Invoking Codex Pilot alone is sufficient; users do not need to add a second Ponytail invocation. For implementation requests, Pilot loads an advertised Ponytail coding skill at most once after it understands the affected code and reuses that result as its minimality review. Trusted host hooks may already inject Ponytail; Pilot does not duplicate them. Ponytail's `lite`, `full`, or `ultra` intensity changes only its minimality guidance—Ponytail `ultra` is unrelated to Codex Ultra and cannot change models, reasoning, or agents. User acceptance criteria, project rules, required tests, and safety controls always win.
 
 Self-hosting verification used [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) v4.9.0. It remains an optional external Plugin and is never installed by Codex Pilot itself. Review and trust its lifecycle hooks separately from installing or invoking its Skills.
 
@@ -174,9 +174,9 @@ max_reasoning = "max"
 max_escalations = 2
 max_agents = 3
 ponytail = "auto"
-show_routing = false
+show_routing = true
 suggest_parent_upgrade = true
-suggest_parent_downgrade = false
+suggest_parent_downgrade = true
 ```
 
 Do not put secrets, executable commands, or tool definitions in this file. Pilot reads only the documented resource-policy keys.
@@ -211,7 +211,7 @@ $codex-pilot route-only: evaluate this migration without changing files
 
 Route-only returns class, required capability, agents, Ultra status, Parent recommendation, confidence, and short reason categories. It makes no file changes or mutating calls and does not reveal private chain-of-thought.
 
-Set `show_routing = true` to add one compact routing line to normal completed work.
+Normal completed work includes one compact routing line in the final response by default. A progress-only line is insufficient. Set `show_routing = false` to hide it.
 
 ## Installation
 
@@ -286,7 +286,7 @@ Project verification commands remain project-specific and may add their own plat
 
 ## Verification
 
-The evaluation corpus in [evals/cases.json](evals/cases.json) covers seven routing cases, four Parent recommendation cases, four escalation transitions, six Ponytail integration cases, and route-only invariants. [evals/README.md](evals/README.md) defines forward-testing rules.
+The evaluation corpus in [evals/cases.json](evals/cases.json) covers seven routing cases, four Parent recommendation cases, four escalation transitions, seven Ponytail integration cases, final-response routing visibility, and route-only invariants. [evals/README.md](evals/README.md) defines forward-testing rules.
 
 Before release:
 

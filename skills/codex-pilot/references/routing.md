@@ -114,4 +114,4 @@ Low confidence first triggers safe, bounded inspection. If it remains low, disti
 
 ## Routing visibility
 
-When `show_routing` is false, keep the route internal. When true, show one short line with class, logical family/effort, and a reason category. Route-only mode always shows the compact decision and never exposes hidden chain-of-thought.
+When `show_routing` is false, keep the route internal. When true, end the final response with exactly one standalone line containing class, logical family/effort, and a reason category. Do not use the formatted `Routing:` line as a progress update; its required location is the final response. Route-only mode instead returns its compact decision summary and never exposes hidden chain-of-thought.

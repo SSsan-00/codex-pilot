@@ -13,12 +13,12 @@ Choose the least expensive computation that can solve the task reliably without 
 ## Start
 
 1. Honor the user's explicit model, reasoning, Fast, Ultra, agent, route-only, and resource limits. Never silently override them.
-2. Unless an override is stated or a known Pilot config is present, use the compact defaults: `quality`, Fast off, Ultra allowed, reasoning `medium..max`, two escalations, three agents, Ponytail auto, hidden routing, Parent upgrades on, and Parent downgrades off. Read [configuration.md](references/configuration.md) only to resolve an override, config file, or Ponytail dependency. Do not modify Codex configuration merely to apply Pilot policy.
+2. Unless an override is stated or a known Pilot config is present, use the compact defaults: `quality`, Fast off, Ultra allowed, reasoning `medium..max`, two escalations, three agents, Ponytail auto, visible compact routing, and Parent upgrade and downgrade suggestions on. Read [configuration.md](references/configuration.md) only to resolve an override, config file, or Ponytail dependency. Do not modify Codex configuration merely to apply Pilot policy.
 3. Use the project instructions already loaded by Codex. Inspect relevant project guidance, code, dependencies, and verification commands before classifying work. Do not copy project rules into this skill.
-4. For implementation work, after understanding the relevant code, apply the Ponytail integration in [configuration.md](references/configuration.md). Skip Ponytail in route-only mode.
+4. For implementation work, after understanding the relevant code, apply the Ponytail integration in [configuration.md](references/configuration.md). The user does not need to invoke Ponytail separately. Skip Ponytail in route-only mode.
 5. Assess complexity, risk, uncertainty, scope, verification difficulty, required reasoning, parallelism benefit, and routing confidence. Read [routing.md](references/routing.md) for the decision rules and current logical tiers.
 
-Keep the assessment concise and internal unless `show_routing` is true or the user requested route-only mode. Do not reveal private chain-of-thought.
+Keep the detailed assessment internal. When `show_routing` is true, expose only the compact routing line defined below; route-only mode exposes only its compact decision summary. Never reveal private chain-of-thought.
 
 ## Tell the truth about capabilities
 
@@ -86,7 +86,7 @@ Use logical family labels in this display. Include an exact model ID only when t
 
 ## Finish
 
-Normally report the implementation and verification, not the hidden routing process. When `show_routing` is true, add one compact line such as `Routing: NORMAL -> Terra / high (multi-file business logic change)`.
+Normally report the implementation and verification, not the hidden routing process. Before completing, resolve `show_routing` (default `true`). When true, the final response must end with exactly one standalone line such as `Routing: NORMAL -> Terra / high (multi-file business logic change)`. Do not emit that line only in commentary or progress updates; a final response without it is incomplete. When false, omit it. Route-only mode uses its decision summary instead of this line.
 
 State any material capability fallback: unavailable requested model, unsupported effort, unknown Parent, Fast not observable, Ultra not controllable, missing required Ponytail, or exhausted escalation budget.
 

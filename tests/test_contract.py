@@ -52,9 +52,9 @@ class PackageContractTests(unittest.TestCase):
                 "max_escalations": 2,
                 "max_agents": 3,
                 "ponytail": "auto",
-                "show_routing": False,
+                "show_routing": True,
                 "suggest_parent_upgrade": True,
-                "suggest_parent_downgrade": False,
+                "suggest_parent_downgrade": True,
             },
         )
 
@@ -63,9 +63,21 @@ class PackageContractTests(unittest.TestCase):
         self.assertEqual(len(corpus["routing"]), 7)
         self.assertEqual(len(corpus["parent_upgrade"]), 4)
         self.assertEqual(len(corpus["escalation"]), 4)
-        self.assertEqual(len(corpus["ponytail_integration"]), 6)
+        self.assertEqual(len(corpus["ponytail_integration"]), 7)
         self.assertTrue(corpus["escalation_cases_are_independent"])
         self.assertTrue(corpus["default_budget_does_not_traverse_full_ladder"])
+
+        visibility = corpus["routing_visibility"]
+        self.assertTrue(visibility["default_show_routing"])
+        self.assertTrue(visibility["normal_completion"]["final_response_line"])
+        self.assertFalse(
+            visibility["normal_completion"]["commentary_only_sufficient"]
+        )
+        self.assertTrue(visibility["normal_completion"]["exactly_one_line"])
+        self.assertTrue(visibility["normal_completion"]["standalone_final_line"])
+        self.assertTrue(
+            visibility["normal_completion"]["missing_line_means_incomplete"]
+        )
 
         ids = [
             case["id"]
@@ -93,7 +105,24 @@ class PackageContractTests(unittest.TestCase):
         ambiguous = next(case for case in corpus["routing"] if case["id"] == "route-07-small-ambiguous")
         self.assertTrue(ambiguous["expected"]["luna_forbidden"])
 
+        parent = {case["id"]: case for case in corpus["parent_upgrade"]}
+        self.assertFalse(parent["parent-c"]["expected"]["downgrade_visible"])
+        self.assertTrue(
+            parent["parent-d"]["expected"]["default_downgrade_visible"]
+        )
+        self.assertTrue(parent["parent-d"]["expected"]["must_not_interrupt"])
+
         ponytail = {case["id"]: case for case in corpus["ponytail_integration"]}
+        self.assertTrue(
+            ponytail["ponytail-pilot-only-invocation"]["expected"][
+                "invoke_ponytail"
+            ]
+        )
+        self.assertFalse(
+            ponytail["ponytail-pilot-only-invocation"]["expected"][
+                "require_separate_user_invocation"
+            ]
+        )
         self.assertFalse(
             ponytail["ponytail-ultra-is-not-codex-ultra"]["expected"][
                 "codex_ultra_activated"

@@ -60,7 +60,7 @@ Codex Pilotは暗黙選択に対応しています。通常はSkill名を付け�
 $codex-pilot このBugを直して、回帰Testも追加してください。
 ```
 
-Codex Pilotは内部でタスクを分類し、必要な場合だけWorker、強いreasoning、Multi-Agentを使用します。既定ではRoutingの詳細を表示せず、実装結果と検証内容を報告します。
+Codex Pilotは内部でタスクを分類し、必要な場合だけWorker、強いreasoning、Multi-Agentを使用します。既定では、最終回答に`Routing: NORMAL -> Terra / high (...)`のような短いRouting判断を1行だけ表示します。途中経過だけに表示して最終回答から省略することはありません。非表示にする場合は`show_routing = false`を指定します。
 
 ## 4. Resource Policyを指定する
 
@@ -109,9 +109,17 @@ Sol / high -> Sol / xhigh -> Sol / max -> Codex Ultra
 
 難しい実装を担当するWorkerのEscalationと、Parent Upgradeは別々に判断されます。
 
+既定では、明らかに簡単な作業に対して既知のParentが過剰に強い場合、完了後に次回向けのDowngrade候補を1行だけ提案します。現在の作業は中断せず、Parentが不明な場合は提案しません。無効にする場合は`suggest_parent_downgrade = false`を指定します。
+
 ## 7. Ponytailを併用する
 
 Ponytailは任意です。未導入でも、既定の`ponytail = "auto"`ではCodex Pilotが通常どおり継続します。
+
+Ponytailを導入済みなら、実装依頼では`$codex-pilot`だけを指定すれば十分です。`$ponytail`を同じPromptへ重ねて指定する必要はなく、Codex Pilotが対象Codeを理解した後にPonytailを一度だけ読み込みます。`route-only`や説明だけの依頼では読み込みません。
+
+```text
+$codex-pilot このBugを最小限の変更で修正し、Testしてください。
+```
 
 導入する場合：
 

@@ -122,8 +122,10 @@
       "id": "parent-d",
       "parent": {"family": "Sol", "reasoning": "max"},
       "prompt": "README typo",
-      "config": {"suggest_parent_downgrade": true},
-      "expected": {"downgrade_visible": true, "must_not_interrupt": true}
+      "expected": {
+        "default_downgrade_visible": true,
+        "must_not_interrupt": true
+      }
     }
   ],
   "escalation_cases_are_independent": true,
@@ -162,6 +164,17 @@
     }
   ],
   "ponytail_integration": [
+    {
+      "id": "ponytail-pilot-only-invocation",
+      "prompt": "$codex-pilot このBugを修正してTestしてください",
+      "config": "auto",
+      "capability": "advertised",
+      "mode": "implementation",
+      "expected": {
+        "invoke_ponytail": true,
+        "require_separate_user_invocation": false
+      }
+    },
     {
       "id": "ponytail-auto-present",
       "config": "auto",
@@ -221,6 +234,20 @@
       }
     }
   ],
+  "routing_visibility": {
+    "default_show_routing": true,
+    "normal_completion": {
+      "final_response_line": true,
+      "commentary_only_sufficient": false,
+      "exactly_one_line": true,
+      "standalone_final_line": true,
+      "missing_line_means_incomplete": true
+    },
+    "show_routing_false": {
+      "routing_line": false
+    },
+    "route_only_uses_compact_summary": true
+  },
   "route_only": {
     "must_not_modify_files": true,
     "must_not_run_mutating_commands": true,

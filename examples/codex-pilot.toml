@@ -12,7 +12,7 @@ max_agents = 3
 
 ponytail = "auto"
 
-show_routing = false
+show_routing = true
 
 suggest_parent_upgrade = true
-suggest_parent_downgrade = false
+suggest_parent_downgrade = true
