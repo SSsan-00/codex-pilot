@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "policy": "quality",
+  "routing": [
+    {
+      "id": "route-01-typo",
+      "prompt": "READMEのスペルミスを1箇所直して",
+      "expected": {
+        "classification": "SIMPLE",
+        "family": "Luna",
+        "reasoning": ["medium"],
+        "ultra_candidate": false,
+        "parent_upgrade": false
+      }
+    },
+    {
+      "id": "route-02-validation",
+      "prompt": "Serviceに小さなValidationを追加してUnit Testも追加して",
+      "expected": {
+        "classification": "NORMAL",
+        "family": "Terra",
+        "reasoning": ["high"],
+        "ultra_candidate": false
+      }
+    },
+    {
+      "id": "route-03-unknown-null",
+      "prompt": "原因不明のNullReferenceExceptionを調査して修正して",
+      "expected": {
+        "classification": "COMPLEX",
+        "family": "Sol",
+        "reasoning": ["high", "xhigh"]
+      }
+    },
+    {
+      "id": "route-04-large-migration",
+      "prompt": "PHPで実装されている大規模業務システムをC#へ移行するArchitectureを設計して",
+      "expected": {
+        "classification": "CRITICAL",
+        "family": "Sol",
+        "reasoning": ["max"],
+        "ultra_candidate": "scope-dependent"
+      }
+    },
+    {
+      "id": "route-05-concurrency",
+      "prompt": "大規模Codebaseで再現困難なConcurrency Bugを調査して。ログ、DB、Async、Cacheに複数原因候補があり独立調査が必要。",
+      "expected": {
+        "classification": "CRITICAL",
+        "family": "Sol",
+        "reasoning": ["max"],
+        "ultra_candidate": "conditional",
+        "ultra_conditions": {
+          "allow_ultra": true,
+          "host_and_account_expose_ultra": true,
+          "max_is_plausibly_insufficient": true,
+          "independent_parallel_work_is_valuable": true
+        },
+        "parallelism": "high"
+      }
+    },
+    {
+      "id": "route-06-one-character",
+      "prompt": "変数名を1文字修正して",
+      "expected": {
+        "classification": "SIMPLE",
+        "family": "Luna",
+        "reasoning": ["medium"]
+      }
+    },
+    {
+      "id": "route-07-small-ambiguous",
+      "prompt": "Code量は少ないが要件が曖昧で既存仕様への影響が分からない変更",
+      "expected": {
+        "classification": ["NORMAL", "COMPLEX"],
+        "minimum_family": "Terra",
+        "luna_forbidden": true,
+        "uncertainty": "high"
+      }
+    }
+  ],
+  "parent_upgrade": [
+    {
+      "id": "parent-a",
+      "parent": {"family": "Sol", "reasoning": "high"},
+      "prompt": "複数Subsystemにまたがる難しいArchitecture判断。前提が曖昧でData Integrityへの影響が大きい。",
+      "conditions": {
+        "routing_confidence": "low",
+        "bounded_inspection_completed": true,
+        "parent_is_classification_or_integration_bottleneck": true
+      },
+      "expected": {
+        "next_parent_recommendation": {"family": "Sol", "reasoning": "xhigh"},
+        "worker_floor_is_separate": true
+      }
+    },
+    {
+      "id": "parent-b",
+      "parent": {"family": "Sol", "reasoning": "xhigh"},
+      "prompt": "極めて難しいSecurity / Concurrency / Distributed System問題。独立した複数調査が必要。",
+      "conditions": {
+        "routing_confidence": "low",
+        "bounded_inspection_completed": true,
+        "parent_is_classification_or_integration_bottleneck": true
+      },
+      "expected": {
+        "next_parent_recommendation": {"family": "Sol", "reasoning": "max"},
+        "later_ultra_recommendation": {
+          "only_if_max_is_plausibly_insufficient": true,
+          "only_if_full_ultra_gate_passes": true
+        }
+      }
+    },
+    {
+      "id": "parent-c",
+      "parent": {"family": "Sol", "reasoning": "max"},
+      "prompt": "README typo",
+      "config": {"suggest_parent_downgrade": false},
+      "expected": {"downgrade_visible": false}
+    },
+    {
+      "id": "parent-d",
+      "parent": {"family": "Sol", "reasoning": "max"},
+      "prompt": "README typo",
+      "config": {"suggest_parent_downgrade": true},
+      "expected": {"downgrade_visible": true, "must_not_interrupt": true}
+    }
+  ],
+  "escalation_cases_are_independent": true,
+  "default_budget_does_not_traverse_full_ladder": true,
+  "escalation": [
+    {
+      "id": "esc-01",
+      "from": "Luna",
+      "evidence": "unresolved verification failure requiring broader reasoning",
+      "expected_next": "Terra"
+    },
+    {
+      "id": "esc-02",
+      "from": "Terra",
+      "evidence": "root cause remains unresolved with contradictory evidence",
+      "expected_next": "Sol"
+    },
+    {
+      "id": "esc-03",
+      "from": "Sol/xhigh",
+      "evidence": "high uncertainty remains on a critical conclusion",
+      "expected_next": "Sol/max"
+    },
+    {
+      "id": "esc-04",
+      "from": "Sol/max",
+      "evidence": "two or more independent investigations have clear value",
+      "conditions": {
+        "classification": "CRITICAL",
+        "uncertainty_or_stakes": "very-high",
+        "max_is_plausibly_insufficient": true,
+        "allow_ultra": true,
+        "host_and_account_expose_ultra": true
+      },
+      "expected_next": "Ultra candidate"
+    }
+  ],
+  "ponytail_integration": [
+    {
+      "id": "ponytail-auto-present",
+      "config": "auto",
+      "capability": "advertised",
+      "mode": "implementation",
+      "expected": {
+        "invoke_after_code_understanding": true,
+        "invoke_at_most_once": true,
+        "duplicate_minimality_review": false
+      }
+    },
+    {
+      "id": "ponytail-auto-absent",
+      "config": "auto",
+      "capability": "absent",
+      "expected": {
+        "continue": true,
+        "imitate_unseen_instructions": false
+      }
+    },
+    {
+      "id": "ponytail-required-absent",
+      "config": "required",
+      "capability": "absent",
+      "expected": {
+        "stop_before_implementation": true,
+        "report_missing_dependency": true
+      }
+    },
+    {
+      "id": "ponytail-ultra-is-not-codex-ultra",
+      "ponytail_intensity": "ultra",
+      "expected": {
+        "codex_ultra_activated": false,
+        "ultra_gate_still_required": true
+      }
+    },
+    {
+      "id": "ponytail-route-only",
+      "config": "auto",
+      "capability": "advertised",
+      "mode": "route-only",
+      "expected": {
+        "invoke_ponytail": false,
+        "modify_files": false,
+        "spawn_agents": false
+      }
+    },
+    {
+      "id": "ponytail-preserves-scope",
+      "config": "auto",
+      "capability": "advertised",
+      "mode": "implementation",
+      "expected": {
+        "preserve_user_acceptance_criteria": true,
+        "preserve_safety_and_required_tests": true
+      }
+    }
+  ],
+  "route_only": {
+    "must_not_modify_files": true,
+    "must_not_run_mutating_commands": true,
+    "must_not_spawn_agents": true,
+    "must_not_solve_or_reproduce_clear_task": true,
+    "required_fields": [
+      "classification",
+      "recommended",
+      "ultra",
+      "parent_upgrade",
+      "routing_confidence",
+      "reasons"
+    ]
+  }
+}

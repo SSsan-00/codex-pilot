@@ -1,0 +1,8 @@
+interface:
+  display_name: "Codex Pilot"
+  short_description: "Right-size reasoning and delegation for development tasks"
+  brand_color: "#2563EB"
+  default_prompt: "Use $codex-pilot to complete this development task with a right-sized execution strategy."
+
+policy:
+  allow_implicit_invocation: true

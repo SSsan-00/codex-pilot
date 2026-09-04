@@ -1,0 +1,36 @@
+{
+  "name": "codex-pilot",
+  "version": "0.2.0",
+  "description": "Capability-aware routing and orchestration for Codex software-development tasks.",
+  "author": {
+    "name": "Codex Pilot contributors"
+  },
+  "homepage": "https://github.com/SSsan-00/codex-pilot",
+  "repository": "https://github.com/SSsan-00/codex-pilot",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "orchestration",
+    "routing",
+    "ponytail",
+    "subagents",
+    "software-development"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Codex Pilot",
+    "shortDescription": "Right-size Codex reasoning and delegation for each task",
+    "longDescription": "Assess development-task complexity, risk, uncertainty, scope, verification cost, and parallelism before selecting a capability-aware Codex execution strategy.",
+    "developerName": "Codex Pilot contributors",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive"
+    ],
+    "defaultPrompt": [
+      "Use $codex-pilot to complete this development task with a right-sized execution strategy.",
+      "Use $codex-pilot in route-only mode for this task.",
+      "Use $codex-pilot with the balanced policy for this change."
+    ],
+    "brandColor": "#2563EB"
+  }
+}
