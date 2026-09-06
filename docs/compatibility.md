@@ -4,7 +4,7 @@ This is a dated implementation snapshot, not a permanent model catalog. Codex Pi
 
 ## Verified environment
 
-Audit date: 2026-09-05
+Audit date: 2026-09-06
 
 - Host OS: macOS (Apple Silicon environment)
 - ChatGPT desktop Codex bundle: `com.openai.codex` version `26.825.31414`, build `7287`
@@ -44,6 +44,7 @@ The audited local model catalog exposed these exact IDs:
 | Luna | `gpt-5.6-luna` | low through max | yes |
 | Terra | `gpt-5.6-terra` | low through max, plus ultra | yes |
 | Sol | `gpt-5.6-sol` | low through max, plus ultra | yes |
+| Astra | `gpt-6-astra` | low through max | host-dependent |
 
 Do not generalize this table to another account or release. Official pages also use identifiers such as `gpt-5.6` without documenting that it is interchangeable with `gpt-5.6-sol`. Pilot never silently normalizes those values.
 
@@ -52,12 +53,14 @@ Explicit read-only worker probes were accepted and host run metadata confirmed:
 - Luna / medium;
 - Terra / high;
 - Sol / max.
+- Astra availability was exposed by the current host; no live worker probe was performed for this documentation-only compatibility update.
 
 The current orchestration interface required a context-free or bounded-history spawn for explicit model/effort overrides; a full-history inherited spawn did not accept an override. This is host behavior, not a portable Skill guarantee.
 
 Official references:
 
 - [Models](https://learn.chatgpt.com/docs/models)
+- [GPT-6 Astra](https://developers.openai.com/api/docs/models/gpt-6-astra)
 - [Subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents)
 
 ## Parent Model detection

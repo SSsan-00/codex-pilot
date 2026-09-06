@@ -50,6 +50,7 @@ Use logical families in policy decisions:
 - **Luna**: efficient worker for clear, narrow, repeatable tasks.
 - **Terra**: balanced worker for ordinary development and bounded investigation.
 - **Sol**: flagship worker or Parent for ambiguous, complex, high-value work.
+- **Astra**: frontier worker or Parent for the hardest end-to-end, critical work.
 
 The dated [compatibility snapshot](../../../docs/compatibility.md) records the IDs seen during development. Preserve the exact ID returned by the current host. Never silently translate one host identifier into another.
 
@@ -64,7 +65,11 @@ These are sufficiency targets before capability fallback and user limits.
 | SIMPLE | Luna / medium | Luna / medium | Luna / medium |
 | NORMAL | Terra / high | Terra / medium | Terra / medium |
 | COMPLEX | Sol / xhigh | Sol / high | Terra / high only when bounded and confidence is high; otherwise Sol / high |
-| CRITICAL | Sol / max | Sol / xhigh | Sol / xhigh |
+| CRITICAL | Astra / max | Sol / xhigh | Sol / xhigh |
+
+## Family-relative strength labels
+
+Append the selected effort's ordinal within the family to visible routes: `low=1`, `medium=2`, `high=3`, `xhigh=4`, and `max=5`. For example, Luna / high is `[Luna-3]` and Astra / max is `[Astra-5]`. This label reports reasoning stage within that family; never present it as an absolute performance comparison between families. Omit stages the exact host model does not advertise.
 
 Apply `min_reasoning` and `max_reasoning` after selecting the baseline. Never ask for an effort the chosen exact model does not advertise. If a lower hard maximum prevents the reliable floor, obey it, strengthen verification where possible, and report the constraint.
 
@@ -114,4 +119,4 @@ Low confidence first triggers safe, bounded inspection. If it remains low, disti
 
 ## Routing visibility
 
-When `show_routing` is false, keep the route internal. When true, end the final response with exactly one standalone line containing class, logical family/effort, and a reason category. Do not use the formatted `Routing:` line as a progress update; its required location is the final response. Route-only mode instead returns its compact decision summary and never exposes hidden chain-of-thought.
+When `show_routing` is false, keep the route internal. When true, end the final response with exactly one standalone line containing class, logical family/effort, family-relative strength label, and a reason category. Do not use the formatted `Routing:` line as a progress update; its required location is the final response. Route-only mode instead returns its compact decision summary and never exposes hidden chain-of-thought.

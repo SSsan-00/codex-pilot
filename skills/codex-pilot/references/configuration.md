@@ -54,11 +54,11 @@ If `min_reasoning` is higher than `max_reasoning`, ignore both invalid values an
 
 ### quality
 
-Default. Prefer strong verification and allow upper tiers, Max, or Ultra when justified. Keep reasoning at medium or above. Speed is the lowest priority.
+Default. Prefer strong verification and allow Astra, Max, or Ultra when justified. Keep reasoning at medium or above. Speed is the lowest priority.
 
 ### balanced
 
-Prefer Luna and Terra for clear work, use Sol when complexity or risk requires it, and use high effort selectively. Fast remains off unless explicitly allowed. Ultra requires a clear multi-agent benefit.
+Prefer Luna and Terra for clear work, use Sol when complexity or risk requires it, and reserve Astra for critical work. Use high effort selectively. Fast remains off unless explicitly allowed. Ultra requires a clear multi-agent benefit.
 
 ### throughput
 

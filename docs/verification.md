@@ -101,7 +101,7 @@ A fresh explicit review session loaded both the source-linked `codex-pilot` Skil
 
 ## Routing corpus
 
-Independent read-only forward evaluation produced:
+The pre-Astra independent read-only forward evaluation produced:
 
 | Case | Result |
 | --- | --- |
@@ -113,7 +113,7 @@ Independent read-only forward evaluation produced:
 | Difficult multi-source concurrency bug | CRITICAL, Sol / max, Ultra candidate only if the full gate, including host/account capability, passes |
 | Small but ambiguous compatibility change | COMPLEX, Sol / xhigh in the observed run; Luna excluded |
 
-The seventh case permits NORMAL or COMPLEX as long as the high-uncertainty floor excludes Luna and selects Terra or stronger.
+The current corpus routes CRITICAL migration and concurrency cases to Astra / max `[Astra-5]` when advertised, with capability fallback preserved. The seventh case permits NORMAL or COMPLEX as long as the high-uncertainty floor excludes Luna and selects Terra or stronger. Visible routes use family-relative strength labels, where the numeric suffix is the effort ordinal within that family rather than a cross-family performance rank.
 
 ## Parent recommendations
 
@@ -134,7 +134,8 @@ The four fixture transitions were checked independently:
 Luna -> Terra
 Terra -> Sol
 Sol / xhigh -> Sol / max
-Sol / max -> Ultra candidate, only with the complete Ultra gate
+Sol / max -> Astra / high
+Astra / max -> Ultra candidate, only with the complete Ultra gate
 ```
 
 They are not one default-policy chain. A single run stops after the default two tier escalations unless the user raises the budget.

@@ -10,7 +10,7 @@ Use a fresh Codex task so the installed skill catalog is reloaded. Explicitly in
 $codex-pilot route-only: READMEのスペルミスを1箇所直して
 ```
 
-For each `routing` case, compare the class, logical family, reasoning range, and Ultra flag. For Parent tests, supply the `parent`, completed-inspection, Parent-bottleneck, and config values as explicit test context; do not claim that the skill detected them. The requested Parent step is separate from a stronger worker floor.
+For each `routing` case, compare the class, logical family, reasoning range, family-relative strength label, and Ultra flag. The numeric suffix is the effort ordinal within that family, never a cross-family benchmark rank. For Parent tests, supply the `parent`, completed-inspection, Parent-bottleneck, and config values as explicit test context; do not claim that the skill detected them. The requested Parent step is separate from a stronger worker floor.
 
 Each escalation fixture is an independent transition test. Do not run all four as one default-policy chain: `max_escalations = 2` stops a single run after two tier increases unless the user explicitly raises the budget.
 

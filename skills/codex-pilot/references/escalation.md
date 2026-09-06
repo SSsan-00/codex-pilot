@@ -32,7 +32,7 @@ Escalate a worker when one of these remains after a bounded attempt:
 Use the smallest step likely to address the limitation; do not visit every step mechanically:
 
 ```text
-Luna -> Terra -> Sol high/xhigh -> Sol max -> Ultra candidate
+Luna -> Terra -> Sol high/xhigh -> Sol max -> Astra high/xhigh/max -> Ultra candidate
 ```
 
 An effort increase on the same suitable family may be enough. Ultra additionally requires the gate in `routing.md`.
@@ -60,7 +60,7 @@ Use worker escalation when the Parent can still classify, supervise, and integra
 For a known Parent, progress gradually where supported:
 
 ```text
-Sol / high -> Sol / xhigh -> Sol / max -> Ultra
+Sol / high -> Sol / xhigh -> Sol / max -> Astra / high -> Astra / xhigh -> Astra / max -> Ultra
 ```
 
 A weaker known Parent may first move to the next sufficient family or effort. Do not recommend Ultra unless Max is plausibly insufficient and independent parallel work has clear value. If the Parent is unknown, make the recommendation conditional and never claim the current setting is inadequate as a fact.

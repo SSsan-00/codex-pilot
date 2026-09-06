@@ -62,7 +62,7 @@ class PackageContractTests(unittest.TestCase):
         corpus = json.loads((ROOT / "evals" / "cases.json").read_text(encoding="utf-8"))
         self.assertEqual(len(corpus["routing"]), 7)
         self.assertEqual(len(corpus["parent_upgrade"]), 4)
-        self.assertEqual(len(corpus["escalation"]), 4)
+        self.assertEqual(len(corpus["escalation"]), 5)
         self.assertEqual(len(corpus["ponytail_integration"]), 8)
         self.assertTrue(corpus["escalation_cases_are_independent"])
         self.assertTrue(corpus["default_budget_does_not_traverse_full_ladder"])
@@ -70,6 +70,12 @@ class PackageContractTests(unittest.TestCase):
         visibility = corpus["routing_visibility"]
         self.assertTrue(visibility["default_show_routing"])
         self.assertTrue(visibility["normal_completion"]["final_response_line"])
+        self.assertTrue(
+            visibility["normal_completion"]["family_relative_strength_label"]
+        )
+        self.assertTrue(
+            visibility["normal_completion"]["strength_is_not_cross_family_rank"]
+        )
         self.assertFalse(
             visibility["normal_completion"]["commentary_only_sufficient"]
         )
@@ -94,16 +100,35 @@ class PackageContractTests(unittest.TestCase):
         self.assertTrue(corpus["route_only"]["must_not_run_mutating_commands"])
         self.assertTrue(corpus["route_only"]["must_not_spawn_agents"])
         self.assertTrue(corpus["route_only"]["must_not_solve_or_reproduce_clear_task"])
+        self.assertEqual(
+            corpus["family_relative_strength"],
+            {"low": 1, "medium": 2, "high": 3, "xhigh": 4, "max": 5},
+        )
 
-        concurrency = next(case for case in corpus["routing"] if case["id"] == "route-05-concurrency")
+        concurrency = next(
+            case
+            for case in corpus["routing"]
+            if case["id"] == "route-05-concurrency"
+        )
         self.assertEqual(concurrency["expected"]["ultra_candidate"], "conditional")
         self.assertTrue(
             concurrency["expected"]["ultra_conditions"][
                 "host_and_account_expose_ultra"
             ]
         )
-        ambiguous = next(case for case in corpus["routing"] if case["id"] == "route-07-small-ambiguous")
+        ambiguous = next(
+            case
+            for case in corpus["routing"]
+            if case["id"] == "route-07-small-ambiguous"
+        )
         self.assertTrue(ambiguous["expected"]["luna_forbidden"])
+        critical = next(
+            case
+            for case in corpus["routing"]
+            if case["id"] == "route-04-large-migration"
+        )
+        self.assertEqual(critical["expected"]["family"], "Astra")
+        self.assertEqual(critical["expected"]["strength_label"], "Astra-5")
 
         parent = {case["id"]: case for case in corpus["parent_upgrade"]}
         self.assertFalse(parent["parent-c"]["expected"]["downgrade_visible"])

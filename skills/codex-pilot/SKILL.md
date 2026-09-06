@@ -22,7 +22,7 @@ Keep the detailed assessment internal. When `show_routing` is true, expose only 
 
 ## Tell the truth about capabilities
 
-- Treat display families such as Luna, Terra, and Sol separately from exact model identifiers. Use exact identifiers advertised by the current host; do not invent aliases or assume availability.
+- Treat display families such as Luna, Terra, Sol, and Astra separately from exact model identifiers. Use exact identifiers advertised by the current host; do not invent aliases or assume availability.
 - Specify both model and reasoning when the active subagent interface supports both. If it does not, treat the route as advisory and use the safest available fallback.
 - A static skill cannot reliably infer the live Parent model or reasoning from a config file. Use only explicit runtime metadata or a user-provided value; otherwise record them as `unknown`.
 - Do not claim to change the already-running Parent. Recommend a Parent change only when the Parent is the bottleneck and the recommendation rules below apply.
@@ -58,7 +58,7 @@ First reduce uncertainty with safe inspection. Recommend a Parent upgrade only w
 - the live Parent model and effort are known, or the recommendation is explicitly conditional;
 - a minimally higher supported setting is likely to change the outcome.
 
-Prefer the next sufficient step: higher effort on the same capable Parent before a stronger Parent, and Max before Ultra. Recommend Ultra only when independent parallel investigations materially help. If this gate fires before consequential edits, stop and give the user a short recommendation. Do not expose internal reasoning.
+Prefer the next sufficient step: higher effort on the same capable Parent before a stronger Parent, Astra before Ultra when advertised and sufficient, and Max before Ultra. Recommend Ultra only when independent parallel investigations materially help. If this gate fires before consequential edits, stop and give the user a short recommendation. Do not expose internal reasoning.
 
 Do not suggest a Parent downgrade unless `suggest_parent_downgrade` is true. Parent recommendations never substitute for worker escalation.
 
@@ -74,7 +74,7 @@ Return only a concise decision summary:
 
 ```text
 Classification: COMPLEX
-Recommended: Sol / xhigh
+Recommended: Sol / xhigh [Sol-4]
 Agents: 1-2 bounded investigators
 Ultra: unnecessary
 Parent upgrade: unnecessary
@@ -82,11 +82,11 @@ Routing confidence: medium
 Reasons: multi-module impact; unresolved cause; difficult verification
 ```
 
-Use logical family labels in this display. Include an exact model ID only when the host advertised it. If the Parent is unknown, say so rather than guessing.
+Use logical family labels and the family-relative strength label defined in `routing.md`. Include an exact model ID only when the host advertised it. If the Parent is unknown, say so rather than guessing.
 
 ## Finish
 
-Normally report the implementation and verification, not the hidden routing process. Before completing, resolve `show_routing` (default `true`). When true, the final response must end with exactly one standalone line such as `Routing: NORMAL -> Terra / high (multi-file business logic change)`. Do not emit that line only in commentary or progress updates; a final response without it is incomplete. When false, omit it. Route-only mode uses its decision summary instead of this line.
+Normally report the implementation and verification, not the hidden routing process. Before completing, resolve `show_routing` (default `true`). When true, the final response must end with exactly one standalone line such as `Routing: NORMAL -> Terra / high [Terra-3] (multi-file business logic change)`. The bracketed label is the selected family's reasoning stage, not a cross-family benchmark rank. Do not emit that line only in commentary or progress updates; a final response without it is incomplete. When false, omit it. Route-only mode uses its decision summary instead of this line.
 
 State any material capability fallback: unavailable requested model, unsupported effort, unknown Parent, Fast not observable, Ultra not controllable, missing required Ponytail, or exhausted escalation budget.
 

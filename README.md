@@ -61,16 +61,16 @@ Codex Pilot uses ordered gates, not a large scoring engine.
 
 | Class | Typical work | `quality` baseline |
 | --- | --- | --- |
-| SIMPLE | Clear local typo, rename, or mechanical edit | Luna / medium |
-| NORMAL | Routine feature, test, refactor, or bug fix | Terra / high |
-| COMPLEX | Unresolved cause, multi-module work, DB/cache/async, difficult verification | Sol / xhigh |
-| CRITICAL | Architecture, major migration, security, data integrity, distributed/concurrent systems | Sol / max |
+| SIMPLE | Clear local typo, rename, or mechanical edit | Luna / medium `[Luna-2]` |
+| NORMAL | Routine feature, test, refactor, or bug fix | Terra / high `[Terra-3]` |
+| COMPLEX | Unresolved cause, multi-module work, DB/cache/async, difficult verification | Sol / xhigh `[Sol-4]` |
+| CRITICAL | Architecture, major migration, security, data integrity, distributed/concurrent systems | Astra / max `[Astra-5]` |
 
 High uncertainty excludes Luna. High risk plus high uncertainty or difficult verification normally requires Sol even if the eventual diff is small. `ULTRA CANDIDATE` is an annotation on COMPLEX or CRITICAL work, not a fifth class.
 
 These labels express required capability. They do not force a worker spawn. If the capable Parent can execute a cohesive task directly, spawning a lower-tier worker may waste more context than it saves.
 
-Exact model IDs are discovered from the current host. Codex Pilot keeps Luna, Terra, and Sol as logical display families and does not guess that one identifier is an alias of another.
+Exact model IDs are discovered from the current host. Codex Pilot keeps Luna, Terra, Sol, and Astra as logical display families and does not guess that one identifier is an alias of another. Visible routes append a family-relative reasoning stage: `low=1`, `medium=2`, `high=3`, `xhigh=4`, and `max=5`. For example, `[Luna-3]` means Luna / high; it is not a cross-family benchmark rank.
 
 ## Execution policies
 
@@ -95,7 +95,7 @@ A static Skill has no documented portable interface that returns the live Parent
 Codex Pilot cannot change the active Parent mid-turn. When routing confidence remains low and the Parent itself is the bottleneck, it recommends the smallest useful next step, usually:
 
 ```text
-Sol / high -> Sol / xhigh -> Sol / max -> Ultra
+Sol / high -> Sol / xhigh -> Sol / max -> Astra / high -> Astra / xhigh -> Astra / max -> Ultra
 ```
 
 It tries bounded inspection first, does not jump directly to Ultra, and keeps Worker escalation separate. Downgrade suggestions are on by default, appear only after clearly SIMPLE work with a known overpowered Parent, and never interrupt the task.
@@ -113,7 +113,7 @@ Parallel workers receive distinct bounded roles such as code-flow analysis, arch
 Escalation follows evidence, not the first failure:
 
 ```text
-Luna -> Terra -> Sol high/xhigh -> Sol max -> Ultra candidate
+Luna -> Terra -> Sol high/xhigh -> Sol max -> Astra high/xhigh/max -> Ultra candidate
 ```
 
 An obvious syntax, command, dependency, or environment issue is corrected at the same tier. Contradictory evidence, an unresolved cause, underestimated impact, or low confidence on a material conclusion can justify a stronger worker. The default budget is two compute-tier escalations, so one run does not traverse the whole illustrative ladder. Each handoff carries only task facts, inspected files, changes, failed verification, remaining hypotheses, and the next check.
@@ -211,7 +211,7 @@ $codex-pilot route-only: evaluate this migration without changing files
 
 Route-only returns class, required capability, agents, Ultra status, Parent recommendation, confidence, and short reason categories. It makes no file changes or mutating calls and does not reveal private chain-of-thought.
 
-Normal completed work includes one compact routing line in the final response by default. A progress-only line is insufficient. Set `show_routing = false` to hide it.
+Normal completed work includes one compact routing line with a family-relative strength label in the final response by default, for example `Routing: NORMAL -> Terra / high [Terra-3] (...)`. A progress-only line is insufficient. Set `show_routing = false` to hide it.
 
 ## Installation
 
@@ -286,7 +286,7 @@ Project verification commands remain project-specific and may add their own plat
 
 ## Verification
 
-The evaluation corpus in [evals/cases.json](evals/cases.json) covers seven routing cases, four Parent recommendation cases, four escalation transitions, eight Ponytail integration cases, final-response routing visibility, and route-only invariants. [evals/README.md](evals/README.md) defines forward-testing rules.
+The evaluation corpus in [evals/cases.json](evals/cases.json) covers seven routing cases, four Parent recommendation cases, five escalation transitions, eight Ponytail integration cases, family-relative strength labels, final-response routing visibility, and route-only invariants. [evals/README.md](evals/README.md) defines forward-testing rules.
 
 Before release:
 

@@ -16,7 +16,7 @@ The repository's compatibility snapshot is documented in [`docs/compatibility.md
 
 ### Worker controls
 
-When the spawn interface accepts `model` and reasoning/effort, set both explicitly. Explicit spawn values normally override agent defaults. When omitted, a child may inherit the Parent; selecting a model without an effort may instead use that model's default. Preserve exact host-reported IDs.
+When the spawn interface accepts `model` and reasoning/effort, set both explicitly. Explicit spawn values normally override agent defaults. When omitted, a child may inherit the Parent; selecting a model without an effort may instead use that model's default. Preserve exact host-reported IDs. Treat Astra as routable only when the current host advertises an exact Astra model ID.
 
 If these controls are absent, do not mutate the user's persistent Codex configuration to emulate them. Use the capable Parent, a host-provided custom agent, or an advisory route.
 
