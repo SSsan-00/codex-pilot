@@ -1,6 +1,6 @@
 {
   "name": "codex-pilot",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Capability-aware routing and orchestration for Codex software-development tasks.",
   "author": {
     "name": "Codex Pilot contributors"

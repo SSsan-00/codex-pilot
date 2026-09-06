@@ -272,7 +272,16 @@
       "commentary_only_sufficient": false,
       "exactly_one_line": true,
       "standalone_final_line": true,
-      "missing_line_means_incomplete": true
+      "missing_line_means_incomplete": true,
+      "workers": {
+        "append_only_when_started": true,
+        "include_role": true,
+        "include_exact_host_model": true,
+        "include_reasoning": true,
+        "include_family_relative_strength": true,
+        "unknown_metadata_is_not_inferred": true,
+        "same_standalone_routing_line": true
+      }
     },
     "show_routing_false": {
       "routing_line": false

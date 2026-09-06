@@ -84,6 +84,7 @@ class PackageContractTests(unittest.TestCase):
         self.assertTrue(
             visibility["normal_completion"]["missing_line_means_incomplete"]
         )
+        self.assertTrue(all(visibility["normal_completion"]["workers"].values()))
 
         ids = [
             case["id"]

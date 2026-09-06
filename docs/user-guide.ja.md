@@ -62,7 +62,7 @@ Codex Pilotは暗黙選択に対応しています。通常はSkill名を付け�
 $codex-pilot このBugを直して、回帰Testも追加してください。
 ```
 
-Codex Pilotは内部でタスクを分類し、必要な場合だけWorker、強いreasoning、Multi-Agentを使用します。既定では、最終回答に`Routing: NORMAL -> Terra / high [Terra-3] (...)`のような短いRouting判断を1行だけ表示します。`[Terra-3]`はTerra系列内でhighが3段階目という意味で、異なるモデル系列を横断した性能順位ではありません。対応は`low=1`、`medium=2`、`high=3`、`xhigh=4`、`max=5`です。途中経過だけに表示して最終回答から省略することはありません。非表示にする場合は`show_routing = false`を指定します。
+Codex Pilotは内部でタスクを分類し、必要な場合だけWorker、強いreasoning、Multi-Agentを使用します。既定では、最終回答に`Routing: NORMAL -> Terra / high [Terra-3] (...)`のような短いRouting判断を1行だけ表示します。PilotがWorkerを起動した場合は、同じ行に`| Workers: tests=gpt-5.6-luna / medium [Luna-2]`の形式で、各Workerの役割、実際のモデルID、reasoning、系列内の強さも表示します。Workerを起動しなかった場合はこの欄を省略し、Hostから確認できない値は推測せず`unknown`と表示します。`[Terra-3]`はTerra系列内でhighが3段階目という意味で、異なるモデル系列を横断した性能順位ではありません。対応は`low=1`、`medium=2`、`high=3`、`xhigh=4`、`max=5`です。途中経過だけに表示して最終回答から省略することはありません。非表示にする場合は`show_routing = false`を指定します。
 
 ## 4. Resource Policyを指定する
 

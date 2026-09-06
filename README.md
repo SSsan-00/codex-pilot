@@ -211,7 +211,7 @@ $codex-pilot route-only: evaluate this migration without changing files
 
 Route-only returns class, required capability, agents, Ultra status, Parent recommendation, confidence, and short reason categories. It makes no file changes or mutating calls and does not reveal private chain-of-thought.
 
-Normal completed work includes one compact routing line with a family-relative strength label in the final response by default, for example `Routing: NORMAL -> Terra / high [Terra-3] (...)`. A progress-only line is insufficient. Set `show_routing = false` to hide it.
+Normal completed work includes one compact routing line with a family-relative strength label in the final response by default, for example `Routing: NORMAL -> Terra / high [Terra-3] (...)`. When Pilot starts workers, that same line also identifies each worker's role, actual host-reported model, reasoning, and family-relative strength: `| Workers: tests=gpt-5.6-luna / medium [Luna-2]`. The worker section is omitted when no worker ran; unavailable metadata is shown as `unknown`, never guessed. A progress-only line is insufficient. Set `show_routing = false` to hide it.
 
 ## Installation
 
