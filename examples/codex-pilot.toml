@@ -1,18 +1,4 @@
-# Copy only when you want persistent Codex Pilot overrides.
+# Optional overrides; no host configuration is modified.
 policy = "quality"
-
-allow_fast = false
-allow_ultra = true
-
-min_reasoning = "medium"
-max_reasoning = "max"
-
-max_escalations = 2
-max_agents = 3
-
-ponytail = "required"
-
+max_agents = 2
 show_routing = true
-
-suggest_parent_upgrade = true
-suggest_parent_downgrade = true

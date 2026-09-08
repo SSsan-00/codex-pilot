@@ -1,93 +1,52 @@
 ---
 name: codex-pilot
-description: Route and orchestrate software-development tasks across available Codex models, reasoning levels, and subagents. Use for bug fixes, features, refactors, migrations, architecture, debugging, and route-only execution planning when computation should be right-sized without reducing correctness. Do not use for non-development work or when the user explicitly chose a different orchestration workflow.
+description: Assess software-development tasks and choose sufficient execution capability, bounded delegation, and proportional verification. Use for features, fixes, refactors, investigations, and route-only development planning; not for non-development work.
 license: MIT
 metadata:
-  short-description: Capability-aware Codex development orchestration
+  short-description: Lean development execution policy
 ---
 
 # Codex Pilot
 
-Choose the least expensive computation that can solve the task reliably without sacrificing correctness. Preserve this priority order unless the user's resource policy changes it: correctness, reliability, sufficient reasoning, verification, maintainability, token and compute efficiency, cost, then speed.
+Decide what execution needs; let the Codex host decide how tools run. Prioritize correctness, reliability, sufficient reasoning, verification, maintainability, context/token efficiency, cost, then speed. Cheap computation is not an end in itself.
 
-## Start
+## Assess and execute
 
-1. Honor the user's explicit model, reasoning, Fast, Ultra, agent, route-only, and resource limits. Never silently override them.
-2. Unless an override is stated or a known Pilot config is present, use the compact defaults: `quality`, Fast off, Ultra allowed, reasoning `medium..max`, two escalations, three agents, Ponytail required, visible compact routing, and Parent upgrade and downgrade suggestions on. Read [configuration.md](references/configuration.md) only to resolve an override, config file, or Ponytail dependency. Do not modify Codex configuration merely to apply Pilot policy.
-3. Use the project instructions already loaded by Codex. Inspect relevant project guidance, code, dependencies, and verification commands before classifying work. Do not copy project rules into this skill.
-4. For implementation work, after understanding the relevant code, apply the Ponytail integration in [configuration.md](references/configuration.md). The user does not need to invoke Ponytail separately. Skip Ponytail in route-only mode.
-5. Assess complexity, risk, uncertainty, scope, verification difficulty, required reasoning, parallelism benefit, and routing confidence. Read [routing.md](references/routing.md) for the decision rules and current logical tiers.
+1. Honor user instructions, resource limits, and project guidance. Enter route-only below immediately when requested.
+2. Inspect only enough relevant code and project-native checks to understand complexity, risk, uncertainty, and scope. Use the class and verification table in [routing.md](references/routing.md); do not perform an elaborate scoring exercise for clear tasks.
+3. Choose the sufficient capability floor, then identify task-specific needs using [capabilities.md](references/capabilities.md) only when external capabilities matter. No external capability is required for a clear README typo.
+4. Execute in the Parent when work is cohesive. Delegate only independent bounded work that benefits from isolation or parallelism: one investigation means one worker; several justify a small fan-out. Prefer read-only roles and explicit file ownership. Default maximum is two Pilot-managed workers across the task, including retries, capped by the host. Zero forbids explicit workers. Respect already-active host orchestration without duplicating its fan-out.
+5. Prefer the smallest sufficient change. Reuse existing abstractions before introducing new ones. Never reduce acceptance criteria or necessary safety checks for minimality. Ponytail may supplement this when available; its absence never blocks Pilot.
+6. Run proportional verification and inspect the diff. Report the result and material limitations.
 
-Keep the detailed assessment internal. When `show_routing` is true, expose only the compact routing line defined below; route-only mode exposes only its compact decision summary. Never reveal private chain-of-thought.
+## Capability honesty and failures
 
-## Tell the truth about capabilities
+Use only model IDs and effort values advertised by the current host. Choose both explicitly when worker controls support them; otherwise use a capable Parent or report the limitation. The route is a sufficiency recommendation, not proof of the executing model. Do not infer live Parent settings from disk configuration or claim to switch the running Parent.
 
-- Treat display families such as Luna, Terra, Sol, and Astra separately from exact model identifiers. Use exact identifiers advertised by the current host; do not invent aliases or assume availability.
-- Specify both model and reasoning when the active subagent interface supports both. If it does not, treat the route as advisory and use the safest available fallback.
-- A static skill cannot reliably infer the live Parent model or reasoning from a config file. Use only explicit runtime metadata or a user-provided value; otherwise record them as `unknown`.
-- Do not claim to change the already-running Parent. Recommend a Parent change only when the Parent is the bottleneck and the recommendation rules below apply.
-- Ultra is a maximum-reasoning, proactive multi-agent mode, not a model name. Do not claim to activate it from this skill.
-- `allow_fast` is permission to use an already available, user- or host-enabled Fast mode. It is not a Fast toggle. Never edit configuration or claim Fast is active without observable host evidence.
+Use already-active host modes within user limits. Fast and Ultra belong to the host; Pilot adds no activation logic, installer, updater, adapter, daemon, or service.
 
-Read [capabilities.md](references/capabilities.md) when availability, Parent detection, Fast, Ultra, installation surface, or model identifiers affect the task.
+Correct obvious command or syntax errors directly. After a meaningful unresolved failure, allow one stronger bounded retry only when evidence suggests it can help and user/agent limits permit it. Carry facts, changed files, failed checks, and the next hypothesis; do not restart a mechanical model ladder. If the reliable floor still cannot be met, report the limitation and unfinished checks; continue safe useful work, but do not claim completion of blocked work. Do not routinely request Parent upgrades or downgrades.
 
-## Route and execute
+## Configuration
 
-Use [routing.md](references/routing.md) to select a baseline and then apply, in order:
+Defaults: `policy = "quality"`, `max_agents = 2`, `show_routing = true`. Read [configuration.md](references/configuration.md) only for overrides or migration. Never modify host configuration to apply Pilot policy.
 
-1. user overrides and hard resource limits;
-2. uncertainty, risk, and verification floors;
-3. host-advertised model and reasoning capabilities;
-4. the smallest sufficient agent topology;
-5. a verification plan proportional to the change.
+## Route-only
 
-For work that fits the capable Parent and does not benefit from isolation, execute in the Parent instead of spawning a worker solely to match a lower-cost tier. The selected worker tier expresses sufficiency, not a requirement to delegate every task.
+Classify the proposed task from the supplied description. Do not inspect target files, reproduce bugs, execute investigation tools, diagnose dependencies, mutate files, solve the task, or spawn workers. Reading Pilot policy is allowed. If information is missing, state uncertainty in the short reasons rather than starting investigation.
 
-Delegate only bounded, independent work. Give each agent one distinct role, such as code-flow exploration, architecture alternatives, or test and edge-case review. Prefer read-heavy parallel work; coordinate write ownership explicitly. Never create more than `max_agents` Pilot-managed explicit workers. This setting does not control an active Ultra host's internal fan-out.
-
-If the runtime is already Ultra, let its orchestration own fan-out. Do not create a duplicate agent tree unless the host explicitly requires delegation and the roles remain non-overlapping.
-
-Implement the requested change, run project-provided checks proportional to risk, inspect the diff, and apply the configured minimality review.
-
-## Parent upgrade gate
-
-First reduce uncertainty with safe inspection. Recommend a Parent upgrade only when all are true:
-
-- routing confidence remains low;
-- the Parent's classification or result-integration ability is the bottleneck, rather than only a worker capability;
-- the live Parent model and effort are known, or the recommendation is explicitly conditional;
-- a minimally higher supported setting is likely to change the outcome.
-
-Prefer the next sufficient step: higher effort on the same capable Parent before a stronger Parent, Astra before Ultra when advertised and sufficient, and Max before Ultra. Recommend Ultra only when independent parallel investigations materially help. If this gate fires before consequential edits, stop and give the user a short recommendation. Do not expose internal reasoning.
-
-Do not suggest a Parent downgrade unless `suggest_parent_downgrade` is true. Parent recommendations never substitute for worker escalation.
-
-## Failures and escalation
-
-Read [escalation.md](references/escalation.md) after a meaningful verification failure, contradictory evidence, unexpected scope, or unresolved cause. Do not escalate for one obvious syntax or environment error that can be corrected directly. Count at most `max_escalations`, and carry a compact evidence handoff instead of restarting from zero.
-
-## Route-only mode
-
-Enter route-only mode when the user says `route-only`, asks only for routing, or uses an equivalent request. Treat the described task as a proposed task: classify what the user supplied without locating, reproducing, spell-checking, testing, or otherwise solving it. Do not read target files merely to confirm that a stated typo, bug, or change exists. Inspect project guidance or a small amount of code only when the description lacks information that could materially change the safe route. Do not modify files, run mutating commands, or spawn agents.
-
-Return only a concise decision summary:
+Return only class, recommended execution capability, required capabilities (or `none`), agent recommendation, optional confidence, and short reason categories:
 
 ```text
 Classification: COMPLEX
-Recommended: Sol / xhigh [Sol-4]
-Agents: 1-2 bounded investigators
-Ultra: unnecessary
-Parent upgrade: unnecessary
-Routing confidence: medium
-Reasons: multi-module impact; unresolved cause; difficult verification
+Recommended: strong capability
+Capabilities: semantic_navigation, current_documentation
+Agents: 1 bounded investigator
+Reasons: multi-module impact; version-dependent behavior
 ```
-
-Use logical family labels and the family-relative strength label defined in `routing.md`. Include an exact model ID only when the host advertised it. If the Parent is unknown, say so rather than guessing.
 
 ## Finish
 
-Normally report the implementation and verification, not the hidden routing process. Before completing, resolve `show_routing` (default `true`). When true, the final response must end with exactly one standalone line such as `Routing: NORMAL -> Terra / high [Terra-3] (multi-file business logic change)`. If Pilot started explicit workers, append each worker's role, exact host-reported model ID, reasoning, and family-relative strength to that same line, for example `| Workers: tests=gpt-5.6-luna / medium [Luna-2]`. Include only workers actually started during the task; omit the section when none were started, and report `unknown` rather than inferring metadata the host did not expose. The bracketed label is the selected family's reasoning stage, not a cross-family benchmark rank. Do not emit that line only in commentary or progress updates; a final response without it is incomplete. When false, omit it. Route-only mode uses its decision summary instead of this line.
+Report implementation, verification, and material capability limitations without hidden reasoning. Unless `show_routing = false`, end with one standalone line: `Routing: COMPLEX -> strong capability`. An observed host mapping may use a family/effort such as `Sol / xhigh`; never add custom strength ordinals. Append `| Capabilities: ...` only for capabilities actually used. Report a required but unavailable capability separately in prose, not as used. When explicit workers ran, append compact `| Workers: role=host-model-id / effort` entries using observed metadata; unknown values remain `unknown`. Omit unused sections. Route-only uses its summary instead.
 
-State any material capability fallback: unavailable requested model, unsupported effort, unknown Parent, Fast not observable, Ultra not controllable, missing required Ponytail, or exhausted escalation budget.
-
-For representative decisions and regression prompts, see [the evaluation corpus](../../evals/cases.json).
+See [evaluations](../../evals/README.md) for semantic checks and comparison methodology.

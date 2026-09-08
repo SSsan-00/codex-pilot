@@ -1,23 +1,29 @@
-# Codex Pilot evaluations
+# Semantic evaluations and ablation
 
-`cases.json` is the regression corpus for routing, Parent recommendations, escalation, and route-only behavior. It checks semantic decisions rather than exact prose.
+The corpus separates 18 task decisions from 21 behavioral scenarios. Expected values are rubrics, not a deterministic runtime router. Contract tests validate structure and consistency; they do not prove model behavior.
 
 ## Forward evaluation
 
-Use a fresh Codex task so the installed skill catalog is reloaded. Explicitly invoke the skill for correctness tests:
+Use a fresh evaluator with the updated Skill and only prompts/context, withholding expected answers. Compare class, sufficient floor, relevant capability needs, verification depth, and behavioral boundaries semantically. A provider name is not a requirement, and an unavailable required capability is not a used capability.
 
-```text
-$codex-pilot route-only: READMEのスペルミスを1箇所直して
+For route-only, use an isolated read-only task and inspect tool activity as well as before/after state. Reject attempted target investigation, mutation, dependency diagnostics, task solving, or nested worker spawning even if the sandbox blocked them. Allow reading Pilot policy. An unchanged tree alone is insufficient.
+
+For execution scenarios, provide a disposable fixture or explicit simulated host state. Record whether the test was simulated or live. Require actual host metadata for claims of worker model/effort use. Test missing irrelevant providers, sufficient fallbacks, unmet security needs, raw-evidence recovery, worker limits, one stronger retry, and hidden routing. Report untested cases instead of treating fixture assertions as behavioral passes.
+
+Run package checks with:
+
+```sh
+python3 -m unittest discover -s tests -v
 ```
 
-For each `routing` case, compare the class, logical family, reasoning range, family-relative strength label, and Ultra flag. The numeric suffix is the effort ordinal within that family, never a cross-family benchmark rank. For Parent tests, supply the `parent`, completed-inspection, Parent-bottleneck, and config values as explicit test context; do not claim that the skill detected them. The requested Parent step is separate from a stronger worker floor.
+Run available Skill Creator and Plugin Creator validators too. Keep implicit discovery separate from explicit invocation correctness.
 
-Each escalation fixture is an independent transition test. Do not run all four as one default-policy chain: `max_escalations = 2` stops a single run after two tier increases unless the user explicitly raises the budget.
+## Baseline vs Feature enabled
 
-For `ponytail_integration`, vary advertised capability independently from config. Check invocation timing and boundaries rather than Ponytail's prose: `auto` continues when absent, `required` stops when absent, route-only never invokes it, its `ultra` intensity never activates Codex Ultra, and minimality never shrinks user acceptance criteria or required safety checks.
+For every proposed core addition, compare Baseline versus Feature enabled. Include no-Pilot vs lean-Pilot for overall overhead, and lean-Pilot with one capability disabled vs enabled for individual contributions. Keep task fixtures, model/effort, tool availability (except the ablated feature), acceptance criteria, and budgets matched. Use fresh sessions, alternate order, repeat runs, and score correctness without exposing condition labels where practical.
 
-Route-only tests must run in a disposable clean repository with read-only permissions. Compare the file tree and Git status before and after the run, and inspect the task's tool activity. A passing run contains the required decision fields, attempts no mutating command, spawns no agent, and leaves no file change. An unchanged tree alone is insufficient because the sandbox might have blocked an attempted mutation.
+Record correctness, verification pass rate, token/context usage, tool calls, turns, unnecessary diff size, escalation count, and elapsed time where measurable. Preserve failures and denominator counts; separate total tokens from billing cost, and setup overhead from execution. Report medians, variation, sample size, environment, and unavailable metrics. Token reduction with lower correctness is not a win.
 
-Implicit activation is a separate discovery smoke test because description matching is model-controlled. Ask a representative development request without `$codex-pilot`, then inspect whether the host reports that the skill was loaded. Do not infer activation from similar wording alone.
+Semantic tests check policy decisions; runnable task fixtures measure development outcomes. Do not infer token savings from fewer Markdown lines. Admit a feature to core only when comparisons show meaningful benefit without sacrificing correctness; otherwise leave it out or as an extension. ast-grep requires such evidence before any integration.
 
-Actual worker switching passes only when the host's spawn metadata or agent activity identifies the requested exact model and reasoning. Text saying “using Luna” is not evidence. Mark Parent switching, Fast, or Ultra activation unsupported when the host provides no control for them.
+Results and unverified areas belong in [verification](../docs/verification.md). No benchmark improvement is currently established.

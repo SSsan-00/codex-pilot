@@ -1,305 +1,412 @@
 {
-  "schema_version": 1,
-  "policy": "quality",
-  "family_relative_strength": {
-    "low": 1,
-    "medium": 2,
-    "high": 3,
-    "xhigh": 4,
-    "max": 5
+  "schema_version": 2,
+  "defaults": {
+    "policy": "quality",
+    "max_agents": 2,
+    "show_routing": true
   },
-  "routing": [
+  "decisions": [
     {
-      "id": "route-01-typo",
-      "prompt": "READMEのスペルミスを1箇所直して",
+      "id": "typo",
+      "prompt": "Fix one typo in README.",
       "expected": {
         "classification": "SIMPLE",
-        "family": "Luna",
-        "reasoning": ["medium"],
-        "strength_label": "Luna-2",
-        "ultra_candidate": false,
-        "parent_upgrade": false
+        "floor": "efficient sufficient capability",
+        "capabilities": [],
+        "verification": "focused"
       }
     },
     {
-      "id": "route-02-validation",
-      "prompt": "Serviceに小さなValidationを追加してUnit Testも追加して",
+      "id": "feature",
+      "prompt": "Add sorting to an understood in-memory list view.",
       "expected": {
         "classification": "NORMAL",
-        "family": "Terra",
-        "reasoning": ["high"],
-        "strength_label": "Terra-3",
-        "ultra_candidate": false
+        "floor": "balanced capability",
+        "capabilities": [],
+        "verification": "relevant"
       }
     },
     {
-      "id": "route-03-unknown-null",
-      "prompt": "原因不明のNullReferenceExceptionを調査して修正して",
+      "id": "normal-bug",
+      "prompt": "Fix a known off-by-one in a local pagination calculation.",
+      "expected": {
+        "classification": "NORMAL",
+        "floor": "balanced capability",
+        "capabilities": [],
+        "verification": "relevant"
+      }
+    },
+    {
+      "id": "unknown-cause",
+      "prompt": "Investigate an unexplained failure in an unfamiliar subsystem.",
       "expected": {
         "classification": "COMPLEX",
-        "family": "Sol",
-        "reasoning": ["high", "xhigh"],
-        "strength_label": ["Sol-3", "Sol-4"]
-      }
-    },
-    {
-      "id": "route-04-large-migration",
-      "prompt": "PHPで実装されている大規模業務システムをC#へ移行するArchitectureを設計して",
-      "expected": {
-        "classification": "CRITICAL",
-        "family": "Astra",
-        "reasoning": ["max"],
-        "strength_label": "Astra-5",
-        "ultra_candidate": "scope-dependent"
-      }
-    },
-    {
-      "id": "route-05-concurrency",
-      "prompt": "大規模Codebaseで再現困難なConcurrency Bugを調査して。ログ、DB、Async、Cacheに複数原因候補があり独立調査が必要。",
-      "expected": {
-        "classification": "CRITICAL",
-        "family": "Astra",
-        "reasoning": ["max"],
-        "strength_label": "Astra-5",
-        "ultra_candidate": "conditional",
-        "ultra_conditions": {
-          "allow_ultra": true,
-          "host_and_account_expose_ultra": true,
-          "max_is_plausibly_insufficient": true,
-          "independent_parallel_work_is_valuable": true
-        },
-        "parallelism": "high"
-      }
-    },
-    {
-      "id": "route-06-one-character",
-      "prompt": "変数名を1文字修正して",
-      "expected": {
-        "classification": "SIMPLE",
-        "family": "Luna",
-        "reasoning": ["medium"],
-        "strength_label": "Luna-2"
-      }
-    },
-    {
-      "id": "route-07-small-ambiguous",
-      "prompt": "Code量は少ないが要件が曖昧で既存仕様への影響が分からない変更",
-      "expected": {
-        "classification": ["NORMAL", "COMPLEX"],
-        "minimum_family": "Terra",
-        "luna_forbidden": true,
-        "uncertainty": "high"
-      }
-    }
-  ],
-  "parent_upgrade": [
-    {
-      "id": "parent-a",
-      "parent": {"family": "Sol", "reasoning": "high"},
-      "prompt": "複数Subsystemにまたがる難しいArchitecture判断。前提が曖昧でData Integrityへの影響が大きい。",
-      "conditions": {
-        "routing_confidence": "low",
-        "bounded_inspection_completed": true,
-        "parent_is_classification_or_integration_bottleneck": true
-      },
-      "expected": {
-        "next_parent_recommendation": {"family": "Sol", "reasoning": "xhigh"},
-        "worker_floor_is_separate": true
-      }
-    },
-    {
-      "id": "parent-b",
-      "parent": {"family": "Sol", "reasoning": "xhigh"},
-      "prompt": "極めて難しいSecurity / Concurrency / Distributed System問題。独立した複数調査が必要。",
-      "conditions": {
-        "routing_confidence": "low",
-        "bounded_inspection_completed": true,
-        "parent_is_classification_or_integration_bottleneck": true
-      },
-      "expected": {
-        "next_parent_recommendation": {"family": "Sol", "reasoning": "max"},
-        "later_ultra_recommendation": {
-          "only_if_max_is_plausibly_insufficient": true,
-          "only_if_full_ultra_gate_passes": true
+        "floor": "strong capability",
+        "capabilities": [],
+        "verification": "broader",
+        "optional_capabilities": {
+          "semantic_navigation": "when existing symbol relationships materially aid investigation"
         }
       }
     },
     {
-      "id": "parent-c",
-      "parent": {"family": "Sol", "reasoning": "max"},
-      "prompt": "README typo",
-      "config": {"suggest_parent_downgrade": false},
-      "expected": {"downgrade_visible": false}
-    },
-    {
-      "id": "parent-d",
-      "parent": {"family": "Sol", "reasoning": "max"},
-      "prompt": "README typo",
+      "id": "db-async",
+      "prompt": "Diagnose an async DB/cache interaction across multiple modules.",
       "expected": {
-        "default_downgrade_visible": true,
-        "must_not_interrupt": true
+        "classification": "COMPLEX",
+        "floor": "strong capability",
+        "capabilities": [
+          "semantic_navigation"
+        ],
+        "verification": "broader"
       }
-    }
-  ],
-  "escalation_cases_are_independent": true,
-  "default_budget_does_not_traverse_full_ladder": true,
-  "escalation": [
-    {
-      "id": "esc-01",
-      "from": "Luna",
-      "evidence": "unresolved verification failure requiring broader reasoning",
-      "expected_next": "Terra"
     },
     {
-      "id": "esc-02",
-      "from": "Terra",
-      "evidence": "root cause remains unresolved with contradictory evidence",
-      "expected_next": "Sol"
-    },
-    {
-      "id": "esc-03",
-      "from": "Sol/xhigh",
-      "evidence": "high uncertainty remains on a critical conclusion",
-      "expected_next": "Sol/max"
-    },
-    {
-      "id": "esc-04",
-      "from": "Sol/max",
-      "evidence": "critical end-to-end work remains beyond the current worker",
-      "expected_next": "Astra/high"
-    },
-    {
-      "id": "esc-05",
-      "from": "Astra/max",
-      "evidence": "two or more independent investigations have clear value",
-      "conditions": {
+      "id": "architecture",
+      "prompt": "Design the architecture of a distributed order system.",
+      "expected": {
         "classification": "CRITICAL",
-        "uncertainty_or_stakes": "very-high",
-        "max_is_plausibly_insufficient": true,
-        "allow_ultra": true,
-        "host_and_account_expose_ultra": true
-      },
-      "expected_next": "Ultra candidate"
+        "floor": "strongest sufficient available capability",
+        "capabilities": [],
+        "verification": "independent",
+        "optional_capabilities": {
+          "semantic_navigation": "when existing symbol relationships materially aid investigation"
+        }
+      }
+    },
+    {
+      "id": "security",
+      "prompt": "Fix an authorization bypass in this endpoint.",
+      "expected": {
+        "classification": "CRITICAL",
+        "floor": "strongest sufficient available capability",
+        "capabilities": [
+          "security_analysis"
+        ],
+        "verification": "independent"
+      }
+    },
+    {
+      "id": "migration",
+      "prompt": "Implement a destructive production data migration.",
+      "expected": {
+        "classification": "CRITICAL",
+        "floor": "strongest sufficient available capability",
+        "capabilities": [],
+        "verification": "independent"
+      }
+    },
+    {
+      "id": "callers",
+      "prompt": "Find all callers of OrderService and update the affected flow.",
+      "expected": {
+        "classification": "COMPLEX",
+        "floor": "strong capability",
+        "capabilities": [
+          "semantic_navigation"
+        ],
+        "verification": "broader"
+      }
+    },
+    {
+      "id": "current-api",
+      "prompt": "Implement a local endpoint using the current ASP.NET Core API.",
+      "expected": {
+        "classification": "NORMAL",
+        "floor": "balanced capability",
+        "capabilities": [
+          "current_documentation"
+        ],
+        "verification": "relevant"
+      }
+    },
+    {
+      "id": "logs",
+      "prompt": "Analyze this large repetitive test log and identify the root failure.",
+      "expected": {
+        "classification": "COMPLEX",
+        "floor": "strong capability",
+        "capabilities": [
+          "context_compression"
+        ],
+        "verification": "broader"
+      }
+    },
+    {
+      "id": "short-log",
+      "prompt": "Explain this known one-line local test error.",
+      "expected": {
+        "classification": "SIMPLE",
+        "floor": "efficient sufficient capability",
+        "capabilities": [],
+        "verification": "focused"
+      }
+    },
+    {
+      "id": "exact-code",
+      "prompt": "Review a short exact source excerpt for a known local calculation fix.",
+      "expected": {
+        "classification": "NORMAL",
+        "floor": "balanced capability",
+        "capabilities": [],
+        "verification": "relevant",
+        "accepted_alternatives": [
+          {
+            "classification": "SIMPLE",
+            "floor": "efficient sufficient capability",
+            "verification": "focused",
+            "condition": "clear local low-risk work with no material behavior uncertainty"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tiny-risk",
+      "prompt": "Change one authorization condition at a security boundary.",
+      "expected": {
+        "classification": "CRITICAL",
+        "floor": "strongest sufficient available capability",
+        "capabilities": [
+          "security_analysis"
+        ],
+        "verification": "independent"
+      }
+    },
+    {
+      "id": "ambiguous",
+      "prompt": "A tiny change has ambiguous requirements and contradictory evidence.",
+      "expected": {
+        "classification": "COMPLEX",
+        "floor": "strong capability",
+        "capabilities": [],
+        "verification": "broader"
+      }
+    },
+    {
+      "id": "length",
+      "prompt": "Rename an understood documentation heading repeated in 30 files.",
+      "expected": {
+        "classification": "SIMPLE",
+        "floor": "efficient sufficient capability",
+        "capabilities": [],
+        "verification": "focused"
+      }
+    },
+    {
+      "id": "injection",
+      "prompt": "Fix SQL injection caused by a trust-boundary input.",
+      "expected": {
+        "classification": "CRITICAL",
+        "floor": "strongest sufficient available capability",
+        "capabilities": [
+          "security_analysis"
+        ],
+        "verification": "independent"
+      }
+    },
+    {
+      "id": "internal",
+      "prompt": "Update a stable internal business calculation with understood behavior.",
+      "expected": {
+        "classification": "NORMAL",
+        "floor": "balanced capability",
+        "capabilities": [],
+        "verification": "relevant",
+        "accepted_alternatives": [
+          {
+            "classification": "SIMPLE",
+            "floor": "efficient sufficient capability",
+            "verification": "focused",
+            "condition": "clear local low-risk work with no material behavior uncertainty"
+          }
+        ]
+      }
     }
   ],
-  "ponytail_integration": [
+  "scenarios": [
     {
-      "id": "ponytail-pilot-only-invocation",
-      "prompt": "$codex-pilot このBugを修正してTestしてください",
-      "config": "auto",
-      "capability": "advertised",
-      "mode": "implementation",
-      "expected": {
-        "invoke_ponytail": true,
-        "require_separate_user_invocation": false
-      }
+      "id": "missing-irrelevant",
+      "context": "README typo; all external providers and Ponytail absent.",
+      "expected": [
+        "continue",
+        "no dependency diagnostics",
+        "no required capabilities"
+      ]
     },
     {
-      "id": "ponytail-default-required-absent",
-      "config": "default",
-      "capability": "absent",
-      "mode": "implementation",
-      "expected": {
-        "stop_before_implementation": true,
-        "report_missing_dependency": true
-      }
+      "id": "missing-security",
+      "context": "Authorization bypass; no advertised security provider and no sufficient native analysis or tests.",
+      "expected": [
+        "report security_analysis limitation",
+        "do not claim verified completion",
+        "continue only safe useful work"
+      ]
     },
     {
-      "id": "ponytail-auto-present",
-      "config": "auto",
-      "capability": "advertised",
-      "mode": "implementation",
-      "expected": {
-        "invoke_after_code_understanding": true,
-        "invoke_at_most_once": true,
-        "duplicate_minimality_review": false
-      }
+      "id": "fallback-security",
+      "context": "Authorization bypass; Semgrep absent but project-native analysis, security tests, and review cover the changed boundary.",
+      "expected": [
+        "use sufficient fallback",
+        "verify critical assumptions",
+        "no installer"
+      ]
     },
     {
-      "id": "ponytail-auto-absent",
-      "config": "auto",
-      "capability": "absent",
-      "expected": {
-        "continue": true,
-        "imitate_unseen_instructions": false
-      }
+      "id": "raw-evidence",
+      "context": "A log compressor loses an exact error and file location.",
+      "expected": [
+        "reopen raw evidence",
+        "do not conclude from lossy summary"
+      ]
     },
     {
-      "id": "ponytail-required-absent",
-      "config": "required",
-      "capability": "absent",
-      "expected": {
-        "stop_before_implementation": true,
-        "report_missing_dependency": true
-      }
+      "id": "one-investigator",
+      "context": "Implementation can proceed while one independent read-only flow investigation helps.",
+      "expected": [
+        "one bounded worker",
+        "distinct role",
+        "preserve acceptance criteria"
+      ]
     },
     {
-      "id": "ponytail-ultra-is-not-codex-ultra",
-      "ponytail_intensity": "ultra",
-      "expected": {
-        "codex_ultra_activated": false,
-        "ultra_gate_still_required": true
-      }
+      "id": "no-independent",
+      "context": "Cohesive task fits Parent; cheaper worker exists.",
+      "expected": [
+        "Parent only",
+        "no spawn just to match cheaper model"
+      ]
     },
     {
-      "id": "ponytail-route-only",
-      "config": "auto",
-      "capability": "advertised",
-      "mode": "route-only",
-      "expected": {
-        "invoke_ponytail": false,
-        "modify_files": false,
-        "spawn_agents": false
-      }
+      "id": "agent-zero",
+      "context": "Several investigations; max_agents = 0.",
+      "expected": [
+        "no explicit workers",
+        "respect host limits"
+      ]
     },
     {
-      "id": "ponytail-preserves-scope",
-      "config": "auto",
-      "capability": "advertised",
-      "mode": "implementation",
-      "expected": {
-        "preserve_user_acceptance_criteria": true,
-        "preserve_safety_and_required_tests": true
-      }
+      "id": "retry",
+      "context": "Meaningful unresolved failure with evidence a stronger bounded attempt helps; budget available.",
+      "expected": [
+        "at most one stronger retry",
+        "evidence handoff",
+        "no mechanical ladder"
+      ]
+    },
+    {
+      "id": "retry-exhausted",
+      "context": "One stronger retry already failed.",
+      "expected": [
+        "report remaining limitation",
+        "no second stronger retry",
+        "no routine Parent change request"
+      ]
+    },
+    {
+      "id": "syntax",
+      "context": "A command has an obvious correctable syntax error.",
+      "expected": [
+        "correct directly",
+        "no stronger retry solely for syntax"
+      ]
+    },
+    {
+      "id": "unknown-model",
+      "context": "Host gives no usable model IDs or live Parent effort.",
+      "expected": [
+        "generic capability recommendation",
+        "no invented ID",
+        "no claim of Parent switch"
+      ]
+    },
+    {
+      "id": "hard-limit",
+      "context": "User prohibits strong execution but critical task requires it.",
+      "expected": [
+        "obey limit",
+        "report reliable-floor gap",
+        "no silent override"
+      ]
+    },
+    {
+      "id": "optional-ponytail",
+      "context": "Ponytail absent during ordinary implementation.",
+      "expected": [
+        "continue",
+        "smallest sufficient change",
+        "preserve required checks"
+      ]
+    },
+    {
+      "id": "legacy",
+      "context": "Config contains allow_ultra = false and min_reasoning = high from 0.3.",
+      "expected": [
+        "ignore legacy keys",
+        "disclose resource limits no longer apply",
+        "do not edit config"
+      ]
+    },
+    {
+      "id": "passed-check",
+      "context": "Heavy tests passed; no further changes or concerns.",
+      "expected": [
+        "do not repeat heavy suite"
+      ]
+    },
+    {
+      "id": "routing",
+      "context": "Execution used semantic_navigation only; no workers.",
+      "expected": [
+        "one final Routing line",
+        "only used capability",
+        "no strength ordinal",
+        "no Workers section"
+      ]
+    },
+    {
+      "id": "routing-worker",
+      "context": "One worker ran; host reports model and effort.",
+      "expected": [
+        "compact worker metadata",
+        "no inferred values",
+        "no strength ordinal"
+      ]
+    },
+    {
+      "id": "hidden-routing",
+      "context": "show_routing = false during execution.",
+      "expected": [
+        "no Routing line"
+      ]
+    },
+    {
+      "id": "route-only",
+      "context": "route-only: Fix a README typo.",
+      "expected": [
+        "summary only",
+        "no target inspection",
+        "no investigation tools",
+        "no mutation attempts",
+        "no agent spawn",
+        "no task solving"
+      ]
+    },
+    {
+      "id": "route-only-missing",
+      "context": "route-only: unclear change, all providers missing.",
+      "expected": [
+        "state uncertainty",
+        "no dependency diagnostics",
+        "no target inspection"
+      ]
+    },
+    {
+      "id": "host-modes",
+      "context": "Ultra is already active; independent host fan-out exists.",
+      "expected": [
+        "no duplicate tree",
+        "no claimed activation"
+      ]
     }
-  ],
-  "routing_visibility": {
-    "default_show_routing": true,
-    "normal_completion": {
-      "final_response_line": true,
-      "family_relative_strength_label": true,
-      "strength_is_not_cross_family_rank": true,
-      "commentary_only_sufficient": false,
-      "exactly_one_line": true,
-      "standalone_final_line": true,
-      "missing_line_means_incomplete": true,
-      "workers": {
-        "append_only_when_started": true,
-        "include_role": true,
-        "include_exact_host_model": true,
-        "include_reasoning": true,
-        "include_family_relative_strength": true,
-        "unknown_metadata_is_not_inferred": true,
-        "same_standalone_routing_line": true
-      }
-    },
-    "show_routing_false": {
-      "routing_line": false
-    },
-    "route_only_uses_compact_summary": true
-  },
-  "route_only": {
-    "must_not_modify_files": true,
-    "must_not_run_mutating_commands": true,
-    "must_not_spawn_agents": true,
-    "must_not_solve_or_reproduce_clear_task": true,
-    "required_fields": [
-      "classification",
-      "recommended",
-      "ultra",
-      "parent_upgrade",
-      "routing_confidence",
-      "reasons"
-    ]
-  }
+  ]
 }

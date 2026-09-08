@@ -1,51 +1,26 @@
-# Capability boundaries
+# Conditional capability requirements
 
-Read this file only when current Codex capabilities, model identifiers, installation surfaces, Parent detection, Fast, or Ultra affect a decision.
+Pilot specifies needs; the host's current tool descriptions determine providers and invocation. Resolve only capabilities relevant to the task. Provider names below are examples, not mandatory dependencies or verified integrations.
 
-## Current verified design assumptions
+| Capability | Needed when | Avoid when | Example provider |
+| --- | --- | --- | --- |
+| semantic_navigation | Symbol references, callers/callees, class/function relationships, multi-file flow, large codebase navigation, symbol-aware refactoring materially reduce exploration | A clear local text edit needs no relationship analysis | Serena |
+| current_documentation | Current framework, SDK, external API, version-dependent behavior, deprecation/replacement, or specification matters | Project-internal stable logic suffices | Context7 |
+| context_compression | Large repetitive logs, build/test output, JSON, or diagnostics overwhelm useful context | Short output, exact source code, or fidelity-critical evidence | Headroom |
+| security_analysis | Auth, authorization, trust-boundary input validation, injection, command execution, path traversal, uploads, crypto, secrets, sensitive data, or security migration | Ordinary business logic without security implications | Semgrep |
 
-The repository's compatibility snapshot is documented in [`docs/compatibility.md`](../../../docs/compatibility.md). Re-check the current host instead of treating that snapshot as a permanent catalog.
+For current documentation, identify the project's relevant version and prefer authoritative documentation matching it. For compression, preserve access to raw output and exact errors, locations, and causal evidence; reopen originals before correctness-critical conclusions. Compression never outranks fidelity.
 
-### Skills and plugins
+## Availability and fallback
 
-- A distributable plugin has `.codex-plugin/plugin.json` and may bundle one or more skills under `skills/`.
-- A skill requires `SKILL.md` with `name` and `description`. Codex may invoke it explicitly or implicitly from its description.
-- Installed plugin components become available in a new chat or CLI session. Standalone user skills can be installed under the host-documented user skill path; Codex supports symlinked skill folders.
-- `AGENTS.md` is loaded by Codex for project-specific guidance. Pilot must not duplicate or replace it.
-- Hooks are available but intentionally absent from Codex Pilot: routing is a judgment workflow, and a lifecycle hook would add trust, portability, and failure surface without enabling live Parent switching.
+A required capability is an analytical need, not a requirement for one named product. Prefer currently advertised semantic navigation when symbol relationships matter; bounded native search and source inspection may suffice. Authoritative docs lookup can replace a docs provider. Focused raw-output extraction can replace compression. Existing project analysis and targeted security tests/review may cover a security need.
 
-### Worker controls
+Evaluate whether the fallback meets the same verification floor. Report any material gap, especially unavailable security analysis on authorization work. Continue safe work when possible; leave affected conclusions unverified if the need cannot be met. A missing irrelevant tool never blocks the task. Do not install or diagnose all providers before starting.
 
-When the spawn interface accepts `model` and reasoning/effort, set both explicitly. Explicit spawn values normally override agent defaults. When omitted, a child may inherit the Parent; selecting a model without an effort may instead use that model's default. Preserve exact host-reported IDs. Treat Astra as routable only when the current host advertises an exact Astra model ID.
+## Responsibility boundary
 
-If these controls are absent, do not mutate the user's persistent Codex configuration to emulate them. Use the capable Parent, a host-provided custom agent, or an advisory route.
+The host, its plugins, and advertised tools own installation, package/version management, APIs, and execution. Pilot owns assessment, bounded delegation, and verification depth. Do not hard-code provider tool names, add compatibility shims, pin versions, build wrappers, or implement MCP supervision.
 
-### Parent detection and switching
+Ponytail is optional. ast-grep is not a core capability or integration; consider it only as a future extension after comparative evidence shows value beyond semantic navigation. Record observed integrations as dated snapshots in [compatibility](../../../docs/compatibility.md), never as a permanent catalog.
 
-A skills-only plugin has no documented portable API that returns the live Parent model and reasoning effort. Disk configuration is insufficient because a turn may override it. Treat Parent values as known only when the host exposes them in runtime metadata or the user states them.
-
-A skill cannot change the already-running Parent mid-turn. It can recommend a new composer/CLI selection for a new turn or session.
-
-### Ultra
-
-Ultra is a supported-model and account-dependent execution mode combining maximum reasoning with proactive subagent delegation. It is not an exact model ID. Pilot may use an already active Ultra environment or recommend it, but cannot claim to enable it through `SKILL.md`, `openai.yaml`, or `plugin.json`.
-
-Official surfaces can differ in how they enumerate `max` and `ultra`. Trust the current host's advertised values and fall back without failure.
-
-### Fast
-
-Fast is controlled by the Codex host, such as the interactive CLI command `/fast` or host configuration on supported models. There is no documented Skill or Plugin manifest field that toggles Fast for the live turn. `allow_fast` therefore grants policy permission only. Require observable status before stating that Fast is active.
-
-### Platform behavior
-
-Keep the skill instructions shell-neutral. Respect the current environment's path syntax; never translate Windows paths to WSL paths implicitly.
-
-- macOS and Linux: use tools already provided by the host and project.
-- Windows Native: prefer PowerShell or cross-platform project commands; do not assume `rm`, `grep`, `sed`, or `awk`.
-- WSL: treat Linux paths and mounted Windows paths as presented.
-
-Codex Pilot has no mandatory runtime script, shell, external router, SaaS, API key, or MCP dependency. Actual project commands may still depend on the project being worked on.
-
-## Privacy
-
-Do not persist prompt or source contents for routing. If the host or user requests metadata, limit it to classification, selected logical family and exact advertised ID, effort, escalation count, reason category, and timestamp. Never record secrets, credentials, source text, prompt text, or environment-variable values.
+Do not persist source, prompts, secrets, or routing telemetry. Use host-approved tools within the task's data and permission boundaries.
