@@ -1,6 +1,6 @@
 # Codex Pilot
 
-Codex Pilot 0.4.0 — **Lean Execution Policy** — is a skills-only development execution policy. It decides how much capability, investigation, delegation, and verification a task needs.
+Codex Pilot 0.4.1 — **Lean Execution Policy** — is a skills-only development execution policy. It decides how much capability, investigation, delegation, and verification a task needs.
 
 Priority: correctness → reliability → sufficient reasoning → verification → maintainability → context/token efficiency → cost → speed. Routing overhead must earn its place; using a cheaper model is not the goal.
 
@@ -48,6 +48,10 @@ Use project-native focused checks for small work, relevant tests/checks for norm
 
 Prefer the smallest sufficient change and existing abstractions without reducing acceptance criteria. Ponytail is an optional enhancement; absence never blocks Pilot.
 
+## Completion integrity
+
+Pilot may call work complete only when acceptance criteria are met, relevant checks passed or the user explicitly waived them, required analysis has a verified sufficient fallback, and no material risk remains unresolved. If this is not true, it must return `Status: partial` or `Status: blocked`, state the unmet condition and next safe check, and avoid completion language. A weak Parent, unavailable worker, user resource cap, failed check, or missing required capability never converts an unverified result into a completed one.
+
 ## Usage
 
 ```text
@@ -75,7 +79,7 @@ show_routing = true
 
 Quality prioritizes uncertainty coverage; balanced avoids extra work after reliability is met; throughput favors fewer calls and cohesive execution at the same reliable floor. Current user instructions override repository settings, user settings, and defaults.
 
-Version 0.4 replaces the 0.3 configuration and output contract. Legacy keys are ignored; move former resource limits into explicit task instructions or host settings. Parent upgrade/downgrade suggestions, multi-step escalation, custom strength labels, and required Ponytail are removed. The worker default is now two. See [configuration and legacy keys](skills/codex-pilot/references/configuration.md).
+Version 0.4 replaces the 0.3 configuration and output contract. Legacy keys are ignored; move former resource limits into explicit task instructions or host settings. Parent upgrade/downgrade suggestions, multi-step escalation, custom strength labels, and required Ponytail are removed. The worker default is now two. Version 0.4.1 adds the explicit completion-integrity gate. See [configuration and legacy keys](skills/codex-pilot/references/configuration.md).
 
 ## Installation
 

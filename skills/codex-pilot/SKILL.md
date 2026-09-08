@@ -27,6 +27,10 @@ Use already-active host modes within user limits. Fast and Ultra belong to the h
 
 Correct obvious command or syntax errors directly. After a meaningful unresolved failure, allow one stronger bounded retry only when evidence suggests it can help and user/agent limits permit it. Carry facts, changed files, failed checks, and the next hypothesis; do not restart a mechanical model ladder. If the reliable floor still cannot be met, report the limitation and unfinished checks; continue safe useful work, but do not claim completion of blocked work. Do not routinely request Parent upgrades or downgrades.
 
+## Completion integrity
+
+Use a completion claim only when requested acceptance criteria are met, relevant verification passed or the user explicitly waived it, required analysis has a verified sufficient fallback, and no material risk remains unresolved. If any condition fails, report `Status: partial` or `Status: blocked`, name the unmet condition and the next safe check, and do not use “complete”, “done”, “fixed”, or equivalent language. A weak Parent, an unavailable stronger worker, a hard user limit, a failed check, or an unavailable required capability never turns an unverified conclusion into completion.
+
 ## Configuration
 
 Defaults: `policy = "quality"`, `max_agents = 2`, `show_routing = true`. Read [configuration.md](references/configuration.md) only for overrides or migration. Never modify host configuration to apply Pilot policy.
@@ -47,6 +51,6 @@ Reasons: multi-module impact; version-dependent behavior
 
 ## Finish
 
-Report implementation, verification, and material capability limitations without hidden reasoning. Unless `show_routing = false`, end with one standalone line: `Routing: COMPLEX -> strong capability`. An observed host mapping may use a family/effort such as `Sol / xhigh`; never add custom strength ordinals. Append `| Capabilities: ...` only for capabilities actually used. Report a required but unavailable capability separately in prose, not as used. When explicit workers ran, append compact `| Workers: role=host-model-id / effort` entries using observed metadata; unknown values remain `unknown`. Omit unused sections. Route-only uses its summary instead.
+Report implementation, verification, and material capability limitations without hidden reasoning. Apply the completion-integrity gate before writing the result. Unless `show_routing = false`, end with one standalone line: `Routing: COMPLEX -> strong capability`. An observed host mapping may use a family/effort such as `Sol / xhigh`; never add custom strength ordinals. Append `| Capabilities: ...` only for capabilities actually used. Report a required but unavailable capability separately in prose, not as used. When explicit workers ran, append compact `| Workers: role=host-model-id / effort` entries using observed metadata; unknown values remain `unknown`. Omit unused sections. Route-only uses its summary instead.
 
 See [evaluations](../../evals/README.md) for semantic checks and comparison methodology.

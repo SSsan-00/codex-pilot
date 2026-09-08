@@ -39,6 +39,17 @@ Routing: COMPLEX -> strong capability | Capabilities: semantic_navigation
 
 Workerを実際に使った場合は同じ行へ `Workers: review=<実モデルID> / <reasoning>` を追記します。観測できない値は `unknown` とします。
 
+## 完了の防御策
+
+Codex Pilotは、次のすべてを満たす場合だけ完了として報告します。
+
+- 依頼された受入条件を満たした
+- 関連する検証が成功した、またはUserが明示的に省略した
+- 必要な分析に十分な代替手段があり、その結果を確認した
+- 重要なRiskや未解決事項が残っていない
+
+1つでも満たさなければ、`Status: partial`または`Status: blocked`として、不足している条件と次の安全な確認を報告します。弱いParent、利用不能なWorker、UserのResource制限、検証失敗、必要なCapabilityの不足を、完了扱いに変換しません。
+
 ## 能力と検証
 
 - semantic_navigation：呼び出し関係や複数ファイルの流れを調べる場合。
