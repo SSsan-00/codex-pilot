@@ -1,6 +1,6 @@
 # Codex Pilot
 
-Codex Pilot 0.4.1 — **Lean Execution Policy** — is a skills-only development execution policy. It decides how much capability, investigation, delegation, and verification a task needs.
+Codex Pilot 0.4.2 — **Lean Execution Policy** — is a skills-only development execution policy. It decides how much capability, investigation, delegation, and verification a task needs.
 
 Priority: correctness → reliability → sufficient reasoning → verification → maintainability → context/token efficiency → cost → speed. Routing overhead must earn its place; using a cheaper model is not the goal.
 
@@ -50,7 +50,11 @@ Prefer the smallest sufficient change and existing abstractions without reducing
 
 ## Completion integrity
 
-Pilot may call work complete only when acceptance criteria are met, relevant checks passed or the user explicitly waived them, required analysis has a verified sufficient fallback, and no material risk remains unresolved. If this is not true, it must return `Status: partial` or `Status: blocked`, state the unmet condition and next safe check, and avoid completion language. A weak Parent, unavailable worker, user resource cap, failed check, or missing required capability never converts an unverified result into a completed one.
+Completion requires evidence covering acceptance criteria and final changes, analysis satisfied directly or by a sufficient fallback when needed, and no unresolved material correctness or capability gap. Worker assurances alone do not suffice. Unknown Parent metadata alone does not block evidence-backed work.
+
+Report checks as passed, failed, not run, or explicitly waived. A waiver cannot erase a known failure or unresolved critical assumption; distinguish implementation completion from waived verification. Use `Status: partial` for useful work with unmet conditions and `Status: blocked` when no safe in-scope progress remains. Scoped subresults may be reported without implying whole-task completion, even when routing is hidden. These are model instructions, not a host-enforced guarantee.
+
+Reuse current policy and evidence from context, and rerun only checks affected by changes. This reduces avoidable repetition; total token savings remain unmeasured.
 
 ## Usage
 
@@ -59,7 +63,9 @@ $codex-pilot fix this bug and verify the affected behavior
 $codex-pilot route-only: assess this authorization migration
 ```
 
-Implicit invocation remains enabled but is model-dependent. Route-only classifies the supplied proposal without target-file inspection, investigation, mutation, or agent spawning.
+Implicit invocation remains enabled but is model-dependent. Skip it only for unambiguous low-risk text edits or known trivial explanations requiring no investigation. Ordinary development, uncertain or high-risk work, and explicit invocation remain in scope. This reduces unnecessary selection in a small simulation, not a measured token/quality benchmark; see [evaluation results](docs/verification.md#2026-09-10-policy-refinement).
+
+Route-only classifies the supplied proposal without target-file inspection, investigation, mutation, or agent spawning.
 
 Final execution responses normally end with a compact recommendation:
 

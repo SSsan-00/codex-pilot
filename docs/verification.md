@@ -1,4 +1,28 @@
-# Verification — Lean Execution Policy 0.4.0
+# Verification records
+
+## 2026-09-10 policy refinement
+
+Source version: 0.4.2. Completion now accepts direct analysis as well as sufficient fallbacks, requires evidence for final changes, separates waived checks from passes, and permits accurate scoped results. Unknown Parent metadata alone does not block verified work. Evidence/policy reuse and affected-check reruns reduce avoidable repetition.
+
+Two fresh-context evaluators were requested with the same advertised model/effort (`gpt-5.6-luna` / medium), one per description. Their effective runtime settings were not independently inspected. Each simulated selection on the same 12 prompts without receiving expected answers, then examined eight completion/context scenarios against the updated policy. This is a small semantic comparison, not a randomized repeated benchmark or live implicit-discovery test.
+
+| Prompt group | Current description | Candidate description |
+| --- | --- | --- |
+| Single README typo, comment formatting (2) | skip both | skip both |
+| Understood heading rename in 30 docs, known one-line error explanation (2) | load both | skip both |
+| Authorization, unknown cause, destructive migration, conflicting requirements (4) | load all | load all |
+| Routine feature, DB/async bug (2) | load both | load both |
+| Explicit typo and explicit route-only typo (2) | load both | load both |
+
+The candidate is adopted narrowly for clear low-risk text edits and known trivial explanations requiring no investigation. This observed two fewer selections in one simulated sample; it does not establish reduced real token usage or unchanged development correctness. Explicit invocation remains supported for every development class. The 12 prompts are retained in the corpus for regression and future live testing.
+
+Both evaluators allowed evidence-backed direct analysis and no-analysis typo completion; rejected a known failing authorization check despite a waiver; required affected checks after changes; rejected unsupported worker assurances; and disclosed unfinished scope when routing was hidden. They called for missing source recovery. One gave ambiguous status reasoning for already-present policy; the other explicitly reused it. Partial/blocked distinctions depended on available safe next work. A focused follow-up confirmed used security analysis belongs in Routing even when no fallback was needed.
+
+Static tests check package/corpus consistency, links, and removed contracts. The old completion test only searched for specific words; it was replaced by the above behavioral evaluation and eight additional scenarios. Passing structural checks is not evidence of error-free model behavior.
+
+Unverified: repeated live selection trials, actual implementation A/B outcomes, total token/cost savings, external provider integrations, and remote CI. No publication is part of this refinement.
+
+## Historical 0.4.0 validation
 
 Date: 2026-09-09. Local source changes only; no release, tag, push, or publication was performed.
 

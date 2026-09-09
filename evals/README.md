@@ -1,6 +1,8 @@
 # Semantic evaluations and ablation
 
-The corpus separates 18 task decisions from 21 behavioral scenarios. Expected values are rubrics, not a deterministic runtime router. Contract tests validate structure and consistency; they do not prove model behavior.
+The corpus separates task decisions from behavioral scenarios; `cases.json` is the source of truth for coverage. Expected values are rubrics, not a deterministic runtime router. Contract tests validate structure and consistency; they do not prove model behavior.
+
+The invocation group checks implicit selection separately from explicit use. Compare the current description with a candidate on identical prompts, including tiny security changes, ambiguous work, routine development, and explicit typo requests. A selection simulation is not proof of live host activation, token savings, or implementation quality; those require actual matched task runs. Report failures without modifying the rubric merely to match an evaluator.
 
 ## Forward evaluation
 

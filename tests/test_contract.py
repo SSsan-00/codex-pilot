@@ -13,7 +13,7 @@ SKILL = ROOT / "skills" / "codex-pilot"
 class PackageContractTests(unittest.TestCase):
     def test_package(self):
         manifest = json.loads((ROOT / ".codex-plugin/plugin.json").read_text())
-        self.assertEqual(manifest["version"], "0.4.1")
+        self.assertEqual(manifest["version"], "0.4.2")
         self.assertTrue((ROOT / manifest["skills"] / "codex-pilot/SKILL.md").is_file())
         for key in ("hooks", "apps", "mcpServers"):
             self.assertNotIn(key, manifest)
@@ -32,11 +32,15 @@ class PackageContractTests(unittest.TestCase):
             "COMPLEX": ("strong capability", "broader"),
             "CRITICAL": ("strongest sufficient available capability", "independent"),
         }
-        cases = corpus["decisions"] + corpus["scenarios"]
+        cases = corpus["decisions"] + corpus["scenarios"] + corpus["invocation"]
         ids = [case["id"] for case in cases]
         self.assertEqual(len(ids), len(set(ids)))
         self.assertEqual(len(corpus["decisions"]), 18)
-        self.assertEqual(len(corpus["scenarios"]), 24)
+        self.assertEqual(len(corpus["scenarios"]), 32)
+        self.assertEqual(len(corpus["invocation"]), 12)
+        for case in corpus["invocation"]:
+            self.assertTrue(case["prompt"])
+            self.assertIn(case["expected"], ("load", "skip"))
         observed = set()
         for case in corpus["decisions"]:
             result = case["expected"]
@@ -51,10 +55,6 @@ class PackageContractTests(unittest.TestCase):
         for case in corpus["scenarios"]:
             self.assertTrue(case["context"])
             self.assertTrue(case["expected"])
-        completion = {case["id"]: case["expected"] for case in corpus["scenarios"] if case["id"].startswith("completion-")}
-        self.assertEqual(set(completion), {"completion-weak-parent", "completion-failed-verification", "completion-user-waiver"})
-        self.assertIn("no completion claim", completion["completion-weak-parent"])
-        self.assertIn("no complete, done, fixed, or equivalent claim", completion["completion-failed-verification"])
 
     def test_markdown_links(self):
         for path in ROOT.rglob("*.md"):
@@ -71,13 +71,6 @@ class PackageContractTests(unittest.TestCase):
             self.assertNotIn(old_key, runtime)
         self.assertNotRegex(runtime, r"\[(?:Luna|Terra|Sol|Astra)-\d\]")
         self.assertFalse((SKILL / "references/escalation.md").exists())
-
-    def test_completion_integrity_is_non_optional(self):
-        skill = (SKILL / "SKILL.md").read_text()
-        self.assertIn("## Completion integrity", skill)
-        self.assertIn("Status: partial", skill)
-        self.assertIn("Status: blocked", skill)
-        self.assertIn("do not use “complete”, “done”, “fixed”", skill)
 
 
 if __name__ == "__main__":

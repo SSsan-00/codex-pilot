@@ -1,6 +1,6 @@
 ---
 name: codex-pilot
-description: Assess software-development tasks and choose sufficient execution capability, bounded delegation, and proportional verification. Use for features, fixes, refactors, investigations, and route-only development planning; not for non-development work.
+description: Assess software-development tasks and choose sufficient execution capability, bounded delegation, and proportional verification. Use for features, fixes, refactors, investigations, and route-only development planning. Skip implicit use only for unambiguous local low-risk text edits or known trivial explanations needing no investigation; never skip for uncertainty or security/data-integrity consequences, and honor explicit invocation. Not for non-development work.
 license: MIT
 metadata:
   short-description: Lean development execution policy
@@ -13,7 +13,7 @@ Decide what execution needs; let the Codex host decide how tools run. Prioritize
 ## Assess and execute
 
 1. Honor user instructions, resource limits, and project guidance. Enter route-only below immediately when requested.
-2. Inspect only enough relevant code and project-native checks to understand complexity, risk, uncertainty, and scope. Use the class and verification table in [routing.md](references/routing.md); do not perform an elaborate scoring exercise for clear tasks.
+2. Inspect relevant code and project-native checks to establish acceptance criteria, risk, uncertainty, and scope. Use [routing.md](references/routing.md) for class and verification depth. Reuse policy and evidence already available in context while current; reopen when changes or missing detail matter. Prefer focused searches and excerpts; resolve relevant truncation before drawing conclusions.
 3. Choose the sufficient capability floor, then identify task-specific needs using [capabilities.md](references/capabilities.md) only when external capabilities matter. No external capability is required for a clear README typo.
 4. Execute in the Parent when work is cohesive. Delegate only independent bounded work that benefits from isolation or parallelism: one investigation means one worker; several justify a small fan-out. Prefer read-only roles and explicit file ownership. Default maximum is two Pilot-managed workers across the task, including retries, capped by the host. Zero forbids explicit workers. Respect already-active host orchestration without duplicating its fan-out.
 5. Prefer the smallest sufficient change. Reuse existing abstractions before introducing new ones. Never reduce acceptance criteria or necessary safety checks for minimality. Ponytail may supplement this when available; its absence never blocks Pilot.
@@ -29,7 +29,9 @@ Correct obvious command or syntax errors directly. After a meaningful unresolved
 
 ## Completion integrity
 
-Use a completion claim only when requested acceptance criteria are met, relevant verification passed or the user explicitly waived it, required analysis has a verified sufficient fallback, and no material risk remains unresolved. If any condition fails, report `Status: partial` or `Status: blocked`, name the unmet condition and the next safe check, and do not use “complete”, “done”, “fixed”, or equivalent language. A weak Parent, an unavailable stronger worker, a hard user limit, a failed check, or an unavailable required capability never turns an unverified conclusion into completion.
+Claim task completion only when acceptance criteria are supported by evidence for the final changes, required analysis is satisfied directly or by a sufficient fallback (if none is needed, no provider is required), and no material correctness or capability gap remains. Worker assurances and model labels alone are not verification. Unknown Parent metadata alone is not a blocker.
+
+Report checks as passed, failed, not run, or explicitly waived; a waiver is not evidence of correctness and cannot erase a known failure or unresolved critical assumption. If verification was waived, distinguish implementation completion from verification and disclose the gap. If the gate fails, use `Status: partial` for useful work with unmet conditions, or `Status: blocked` when no safe in-scope progress remains; name the gap and next safe step. Describe verified subparts accurately without implying the whole task is complete. These disclosures remain required when routing is hidden.
 
 ## Configuration
 
