@@ -1,6 +1,6 @@
 # Codex Pilot
 
-Codex Pilot 0.4.2 — **Lean Execution Policy** — is a skills-only development execution policy. It decides how much capability, investigation, delegation, and verification a task needs.
+Codex Pilot 0.4.3 — **Lean Execution Policy** — is a skills-only development execution policy. It decides how much capability, investigation, delegation, and verification a task needs.
 
 Priority: correctness → reliability → sufficient reasoning → verification → maintainability → context/token efficiency → cost → speed. Routing overhead must earn its place; using a cheaper model is not the goal.
 
@@ -27,7 +27,7 @@ Pilot owns requirements and verification depth. The host owns tool execution, mo
 
 Small diffs do not erase risk or uncertainty. File count and prompt length alone do not raise a class. Exact model IDs and reasoning values come only from the current host. A displayed floor is a recommendation, not evidence that the running Parent changed.
 
-Keep cohesive work in the Parent. Use one worker for one useful independent investigation and a small fan-out for several; default maximum is two workers across the task, including retries. Prefer read-only roles and separate write ownership. One meaningful unresolved failure may justify one stronger bounded retry, never an automatic ladder.
+Keep cohesive work in the Parent. Delegate only when isolation or parallelism helps, with at most one worker at a time per independent investigation; default maximum is two workers across the task, including retries. Prefer read-only roles and separate write ownership. One meaningful unresolved failure may justify one stronger bounded retry, never an automatic ladder. This limit excludes ordinary fixes and affected-check reruns within user limits.
 
 ## Capability requirements
 

@@ -1,5 +1,13 @@
 # Verification records
 
+## 2026-09-14 delegation and retry clarification
+
+Source version: 0.4.3. Delegation requires useful isolation or parallelism; an investigation alone does not require a worker. The stronger-capability retry limit does not cap ordinary fixes or affected-check reruns within user limits. Worker budgets and completion requirements are unchanged.
+
+Added two semantic scenarios for cohesive investigation and ordinary fixes after a stronger retry. All four package contract tests, Skill Creator and Plugin Creator validators, and Git whitespace checks passed. Validators used an isolated temporary Python environment with PyYAML; no runtime dependency was added to Pilot.
+
+The new scenarios are evaluation rubrics, not executed behavioral passes. No fresh model comparison, live worker evaluation, or token/quality benchmark was run for this wording change.
+
 ## 2026-09-10 policy refinement
 
 Source version: 0.4.2. Completion now accepts direct analysis as well as sufficient fallbacks, requires evidence for final changes, separates waived checks from passes, and permits accurate scoped results. Unknown Parent metadata alone does not block verified work. Evidence/policy reuse and affected-check reruns reduce avoidable repetition.

@@ -277,6 +277,14 @@
       ]
     },
     {
+      "id": "cohesive-investigation",
+      "context": "One local bug investigation and its fix share the same context; the Parent can handle both and isolation or parallelism adds no value.",
+      "expected": [
+        "Parent only",
+        "no worker merely because investigation is needed"
+      ]
+    },
+    {
       "id": "agent-zero",
       "context": "Several investigations; max_agents = 0.",
       "expected": [
@@ -300,6 +308,15 @@
         "report remaining limitation",
         "no second stronger retry",
         "no routine Parent change request"
+      ]
+    },
+    {
+      "id": "ordinary-fixes-after-retry",
+      "context": "One stronger retry has been used. Subsequent focused checks expose two ordinary local defects in the requested change. The Parent has sufficient capability and concrete fixes; user budget remains, and no further workers are needed.",
+      "expected": [
+        "fix the defects and rerun affected checks within user limits",
+        "no second stronger retry or automatic stop due to the retry limit",
+        "require evidence for final changes before claiming completion"
       ]
     },
     {

@@ -13,7 +13,7 @@ SKILL = ROOT / "skills" / "codex-pilot"
 class PackageContractTests(unittest.TestCase):
     def test_package(self):
         manifest = json.loads((ROOT / ".codex-plugin/plugin.json").read_text())
-        self.assertEqual(manifest["version"], "0.4.2")
+        self.assertEqual(manifest["version"], "0.4.3")
         self.assertTrue((ROOT / manifest["skills"] / "codex-pilot/SKILL.md").is_file())
         for key in ("hooks", "apps", "mcpServers"):
             self.assertNotIn(key, manifest)
@@ -36,7 +36,7 @@ class PackageContractTests(unittest.TestCase):
         ids = [case["id"] for case in cases]
         self.assertEqual(len(ids), len(set(ids)))
         self.assertEqual(len(corpus["decisions"]), 18)
-        self.assertEqual(len(corpus["scenarios"]), 32)
+        self.assertEqual(len(corpus["scenarios"]), 34)
         self.assertEqual(len(corpus["invocation"]), 12)
         for case in corpus["invocation"]:
             self.assertTrue(case["prompt"])
